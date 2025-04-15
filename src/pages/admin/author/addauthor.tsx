@@ -28,7 +28,6 @@ const Addauthor: React.FC = (props: Props) => {
             },
         )
     };
-    console.log(add);
     
     if (Mutation.loading) {
         return <Spin size="large" />
