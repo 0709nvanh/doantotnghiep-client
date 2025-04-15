@@ -1,19 +1,42 @@
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { FundOutlined } from '@ant-design/icons';
+import { useMutation } from '@apollo/client';
 import {
-    Button, DatePicker, Form,
-    Input, Space
+    Button, Form,
+    Input, Spin
 } from 'antd';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toastDefault } from '../../../common/toast';
+import { addSingleAuthor } from '../../../graphql-client/mutations';
+import { getAuthors } from '../../../graphql-client/query';
+import './form.css';
 interface Props {
 
 }
 
 
 const Addauthor: React.FC = (props: Props) => {
-    const onFinish = (values:any) => {
-        console.log('Received values of form:', values);
-      };
-
+    const navigate = useNavigate();
+    const [add, Mutation] = useMutation<any>(addSingleAuthor);
+    debugger;
+    const onFinish = (values: any) => {
+        values.age = Number(values.age)
+        add(
+            {
+                variables: values,
+                refetchQueries: [{ query: getAuthors }]
+            },
+        )
+    };
+    console.log(add);
+    
+    if (Mutation.loading) {
+        return <Spin size="large" />
+    }
+    if (Mutation.data) {
+        toastDefault('Thêm tác giả thành công')
+        navigate('/admin/authors')
+    }
     return (
         <div>
             <h2>Thêm tác giả</h2>
@@ -21,50 +44,12 @@ const Addauthor: React.FC = (props: Props) => {
                 <Form.Item name="name" label="Tên tác giả" rules={[{ required: true, message: 'Bạn phải nhập tên tác giả' }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Bạn phải nhập tên email' }]}>
+                <Form.Item name="address" label="Địa chỉ" rules={[{ required: true, message: 'Bạn phải nhập địa chỉ' }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item name="adress" label="Địa chỉ" rules={[{ required: true, message: 'Bạn phải nhập địa chỉ' }]}>
-                    <Input />
+                <Form.Item name="age" label="Tuổi" rules={[{ required: true, message: 'Bạn phải nhập tuổi' }]}>
+                    <Input type="number" />
                 </Form.Item>
-                <Form.Item name="phone" label="Số điện thoại" rules={[{ required: true, message: 'Bạn phải nhập số điện thoại' }]}>
-                    <Input />
-                </Form.Item>
-                <Form.Item name="date" label="Năm sinh" rules={[{ required: true, message: 'Bạn phải nhập tuổi' }]}>
-                    <Input />
-                </Form.Item>
-                <Form.List name="addfield">
-                    {(fields, { add, remove }) => (
-                        <>
-                            {fields.map(({ key, name, fieldKey, ...restField }) => (
-                                <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
-                                    <Form.Item
-                                        {...restField}
-                                        name={[name, 'name']}
-                                        fieldKey={[fieldKey, 'name']}
-                                        rules={[{ required: true, message: 'Missing first name' }]}
-                                    >
-                                        <Input placeholder="Tên trường" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        {...restField}
-                                        name={[name, 'value']}
-                                        fieldKey={[fieldKey, 'value']}
-                                        rules={[{ required: true, message: 'Missing last name' }]}
-                                    >
-                                        <Input placeholder="Value" />
-                                    </Form.Item>
-                                    <MinusCircleOutlined onClick={() => remove(name)} />
-                                </Space>
-                            ))}
-                            <Form.Item>
-                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                                    Add field
-                                </Button>
-                            </Form.Item>
-                        </>
-                    )}
-                </Form.List>
                 <Form.Item>
                     <Button type="primary" htmlType="submit">
                         Submit

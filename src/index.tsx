@@ -1,28 +1,31 @@
-import {
-  ApolloClient, ApolloProvider, InMemoryCache
-} from "@apollo/client";
-import 'antd/dist/antd.css';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import "antd/dist/antd.css";
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
+import { PersistGate } from "redux-persist/integration/react";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import persistor, { store } from "./store";
 // khởi tạo apollo client
 const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  uri: 'http://localhost:8866/graphql',
-})
-
+	cache: new InMemoryCache(),
+	uri: "http://localhost:9000/graphql",
+});
 
 ReactDOM.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <ApolloProvider client={client}>
-        <App />
-      </ApolloProvider>
-    </BrowserRouter>
-  </React.StrictMode>,
-  document.getElementById('root')
+	<Provider store={store}>
+		<PersistGate loading={null} persistor={persistor}>
+			<BrowserRouter>
+				<ApolloProvider client={client}>
+					<App />
+				</ApolloProvider>
+			</BrowserRouter>
+		</PersistGate>
+	</Provider>,
+	document.getElementById("root"),
 );
 
 // If you want to start measuring performance in your app, pass a function

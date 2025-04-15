@@ -1,27 +1,17 @@
-import { useQuery } from '@apollo/client';
-import { Spin } from 'antd';
 import React from 'react';
 import './App.css';
-import { getBooks } from './graphql-client/query';
 import Router from './routers';
-
+import { ToastContainer } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
 const App:React.FC = () => {
-  
-
-  const Booklist = () => {
-    const {loading, error, data} = useQuery(getBooks)
-
-    if(loading) {
-      return <Spin size="large" />
-    }
-    if(error) {
-      return <p>error book ...</p>
-    }
-    console.log(data)
+  const user = useSelector((state: any) => state.auth.user)
+  const dispatch = useDispatch()
+  if(!user){
+    
   }
-
   return (
       <div className="App">
+        <ToastContainer autoClose={3000} />
        <Router />
       </div>
   );

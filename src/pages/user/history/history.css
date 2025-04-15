@@ -1,0 +1,21 @@
+.history-nav-list{
+    align-items: center;
+    border-bottom: 6px solid rgba(0, 0, 0, 0.1);
+}
+.history-nav-item{
+    
+}
+.history-nav-item p{
+    margin: 0;
+    padding: 20px 0;
+    color: black;
+    cursor: pointer;
+}
+
+.history-nav-item p:hover{
+    color: chocolate;
+}
+.active-nav{
+    color: chocolate !important;
+    border-bottom: 2px solid chocolate;
+}

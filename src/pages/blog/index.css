@@ -1,0 +1,78 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+.container{
+    max-width: 1200px;
+
+}
+.header-bottom{
+    border-bottom: 1px solid #e5e5e5;
+}
+.header-product-text h1{
+    font-size: 24px;
+}
+a {
+text-decoration: none !important;
+color: black !important;
+   
+}
+a:hover {
+    text-decoration: none !important;
+    color: #f07c29   !important;
+       
+    }
+.header-product-a a:hover{
+    color: #f07c29 !important;
+}
+.datetime{
+  position: absolute;
+  background-color: #fff;
+  padding: 10px;
+}
+.button-blog button{
+  color: #f07c29 !important;
+}
+.button-blog button:hover{
+  color: black !important;
+  border-color: black !important;
+}
+.pagination-button button:hover{
+  color: #fff !important;
+  background-color: #f07c29 !important;
+}
+/* Blog */
+.outstory-span{
+  font-style: italic !important;
+  font-size:18px;
+  color: #575656  !important;
+}
+.input-blog input {
+  outline: none;
+  width: 100%;
+  border-radius: 5px;
+ 
+}
+.input-blog input:focus {
+  outline: none;
+  width: 100%;
+  border-color: #f07c29;
+}
+ textarea {
+  outline: none;
+  width: 92%;
+  border-radius: 5px;
+  border: 2px solid black;
+ 
+}
+ textarea:focus {
+  outline: none;
+  width: 92%;
+  border-color: #f07c29;
+}
+.btn-blog button{
+   background-color: #f07c29 !important;
+}
+.btn-blog button:hover{
+  background-color:black !important;
+}

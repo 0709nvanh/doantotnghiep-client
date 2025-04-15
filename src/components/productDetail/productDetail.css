@@ -1,0 +1,113 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+.container{
+    max-width: 1200px;
+
+}
+.header-bottom{
+    border-bottom: 1px solid #e5e5e5;
+}
+.header-product-text h1{
+    font-size: 24px;
+}
+a {
+text-decoration: none !important;
+color: black !important;
+   
+}
+a:hover {
+    text-decoration: none !important;
+    color: #f07c29   !important;
+       
+    }
+.header-product-a a:hover{
+    color: #f07c29 !important;
+}
+.product-price span{
+    font-size: 28px;
+    color: #f07c29;
+    font-weight: bold;
+}
+
+.skin-6 .num-in {
+    background-color: #333;
+      width: 120px;
+      height: 45px;
+      padding: 3px 0;
+      border-radius: 5px;
+  }
+  
+  .skin-6 .num-in span {
+      display: block;
+      width: 34px;
+      line-height: 39px;
+      height: 39px;
+      color: #fff;
+    font-weight: bold;
+      text-align: center;
+      cursor: pointer;
+      -webkit-transition: all 0.3;
+      -o-transition: all 0.3;
+      transition: all 0.3;
+  }
+  
+  .skin-6 .num-in span:hover {
+      color: #fff !important;
+  }
+  .num1234::-webkit-inner-spin-button{
+    -webkit-appearance: none !important;
+  }
+  .skin-6 .num-in input {
+      height: 39px;
+      width: 60px;
+      border-radius: 5px;
+      text-align: center;
+      background: #333;
+      color: white;
+  }
+
+  .button-addtocard button{
+     background: #f07c29;
+     color: #fff;
+     font-weight: bolder;
+     height: 45px;
+     margin: 0;
+  }
+  .button-addtocard button:hover{
+    background: gray;
+    color: #fff;
+    font-weight: bolder;
+ }
+ .Wistlist a:hover{
+     color: #f07c29 !important;
+ }
+ .Compare a:hover{
+    color: #f07c29 !important;
+}
+.facebook a,i{
+   height: 50% !important;
+}
+.description a{
+    color: #f07c29 !important;
+    font-size: 20px;
+}
+.reviews a ,.aboutbrand a{
+    font-size: 20px;
+}
+.ratings{
+    display: flex;
+    justify-content: center;
+}
+
+.rate {
+    
+	font-size:15px;
+	color:lightgray;
+    justify-content: center !important;
+}
+
+.rate.rated {
+	color:orange;
+}

@@ -1,0 +1,28 @@
+.container-history{
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+}
+
+.header-status h6{
+    text-align: left;
+    border-left: 1px solid #26aa99;
+    color: coral;
+    font-size: 16px;
+}
+
+.header-status-item p{
+    text-align: right;
+    width: 100%;
+    color: #26aa99
+}
+.header-status-item{
+    width: 300px;
+}
+.history-product{
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.history-order-view{
+    border-bottom: 4px solid rgba(0, 0, 0, 0.1);
+}

@@ -1,8 +1,12 @@
-import React, { useState } from 'react'
-import { Table, Button, Spin, Avatar } from 'antd';
-import { useQuery } from '@apollo/client';
-import { getAuthors } from '../../../graphql-client/query';
+import React, { useState, useRef } from 'react'
+import { Table, Button, Spin, Input} from 'antd';
+import { useQuery, useMutation } from '@apollo/client';
+import { getAuthors, getBooks } from '../../../graphql-client/query';
 import { Link } from 'react-router-dom';
+import { deleteAuthor } from '../../../graphql-client/mutations';
+import { toastDefault } from '../../../common/toast';
+const { Search } = Input;
+
 interface Props {
 
 }
@@ -13,24 +17,12 @@ const columns = [
         dataIndex: 'name',
     },
     {
-        title: 'Độ tuổi',
+        title: 'Tuổi',
         dataIndex: 'age',
-    },
-    {
-        title: 'Email',
-        dataIndex: 'email',
-    },
-    {
-        title: 'Số điện thoại',
-        dataIndex: 'phone',
     },
     {
         title: 'Địa chỉ',
         dataIndex: 'address',
-    },    
-    {
-        title: 'Action',
-        dataIndex: 'btnEdit',
     },    
 ];
 
@@ -38,32 +30,39 @@ const columns = [
 
 const Author: React.FC = (props: Props) => {
     const [selectedRowKeys, setSelectedRowKeys] = useState<Array<string>>([])
+    const [keySearch, setKeySearch] = useState<string>('');
     const { loading, error, data } = useQuery(getAuthors)
-
+    const [add, Mutation] = useMutation<any>(deleteAuthor);
+    const inputSearchRef = useRef<any>("");
     if (loading) {
         return <Spin size="large" />
     }
     if (error) {
-        return <p>error book ...</p>
+        return <p>error authors ...</p>
     }
     const start = () => {
         setTimeout(() => {
             setSelectedRowKeys([]);
         }, 1000);
     };
+    if (Mutation.loading) {
+        return <Spin size="large" />
+    }
+    // if (Mutation.loading) {
+    //     toastDefault('Xóa tác giả thành công')
+    // }
 
     const data1: any[] | undefined = [];
     for (let i = 0; i < data.authors.length; i++) {
-        const link = 'editauthor/' + data.authors[i].id
-        data1.push({
-            key: data.authors[i].id,
-            name: data.authors[i].name,
-            address: data.authors[i].address,
-            phone: data.authors[i].phone,
-            email: data.authors[i].email,
-            age: data.authors[i].age,
-            btnEdit: <Button type="primary"><Link to={link}>Sửa sản phẩm</Link></Button>,
-        });
+        if(data.authors[i].name.includes(keySearch)){
+            const link = '/admin/editauthor/' + data.authors[i].slug
+            data1.push({
+                key: data.authors[i].id,
+                name: data.authors[i].name,
+                address: data.authors[i].address,
+                age: data.authors[i].age,
+            });
+        }
     }
 
     const onSelectChange = (selectedRowKeys: any) => {
@@ -72,8 +71,16 @@ const Author: React.FC = (props: Props) => {
     };
 
     const onRemove = () => {
-        if(window.confirm('Are you sure you want to remove')){
+        if(window.confirm('Khi xóa tác giả, các tác phẩm của tác giả cũng bị xóa, bạn có muốn tiếp tục ?')){
             console.log('id', selectedRowKeys)
+            selectedRowKeys.forEach(id => {
+                add({
+                    variables: {id},
+                    refetchQueries: [{ query: getAuthors }, {query: getBooks}]
+                },)
+            })
+            setSelectedRowKeys([])
+            toastDefault('Xóa tác giả thành công')
         }
     }
 
@@ -82,9 +89,25 @@ const Author: React.FC = (props: Props) => {
         selectedRowKeys,
         onChange: onSelectChange,
     };
+
+    const onSearch = (value: string) => console.log(value);
+
+    const handleChageSearch = (e: any) => {
+        const search = inputSearchRef.current.input.value;
+        setKeySearch(search);
+    }
+
     return (
         <div>
-            <div style={{ marginBottom: 16 }}>
+             <Search
+                placeholder="Tìm kiếm"
+                allowClear
+                size="large"
+                onSearch={onSearch}
+                onChange={handleChageSearch}
+                ref={inputSearchRef}
+            />
+            <div style={{ marginBottom: 16, paddingTop: 30 }}>
                 <Button type="primary" onClick={start} disabled={!hasSelected} loading={false}>
                     Bỏ chọn
                 </Button>

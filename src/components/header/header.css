@@ -1,0 +1,214 @@
+.menu-item, .nav-link{
+    height: 50px;
+    position: relative;
+}
+
+.menu-item::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #f07c29;
+    -webkit-transition: all 0.25s;
+    -moz-transition: all 0.25s;
+    -o-transition: all 0.25s;
+    transition: all 0.25s linear;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    visibility: hidden;
+    z-index: 1;
+}
+.menu-item:hover::after{
+    opacity: 1;
+    visibility: visible;
+}
+.menu-item:hover::before{
+    opacity: 1;
+    visibility: visible;
+}
+.menu-item::after{
+    content: "";
+    border-left: 4px solid #b9520a;
+    border-bottom: 4px solid #b9520a;
+    border-top: 4px solid transparent;
+    border-right: 4px solid transparent;
+    position: absolute;
+    top: -8px;
+    -webkit-transition: all 0.25s;
+    -moz-transition: all 0.25s;
+    -o-transition: all 0.25s;
+    transition: all 0.25s linear;
+    left: 100%;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    visibility: hidden;
+}
+
+.menu-item:hover .spanhover{
+    width: 150px;
+}
+
+.menu-item a{
+    display: block;
+    position: absolute;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    text-transform: uppercase;
+}
+.menu-item a h5{
+    line-height: 50px;
+}
+
+.spanhover{
+    transition: width linear 0.25s;
+    position: absolute;
+    bottom: 0;
+    height: 3px;
+    width: 0px;
+    left: 100%;
+    background-color: #f07c29;
+}
+
+.nav-link{
+    height: 50px;
+    position: relative;
+}
+
+.nav-link::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #f07c29;
+    -webkit-transition: all 0.25s;
+    -moz-transition: all 0.25s;
+    -o-transition: all 0.25s;
+    transition: all 0.25s linear;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    visibility: visible;
+    z-index: 10;
+}
+
+.nav-link::after{
+    content: "";
+    border-left: 4px solid #b9520a;
+    border-bottom: 4px solid #b9520a;
+    border-top: 4px solid transparent;
+    border-right: 4px solid transparent;
+    position: absolute;
+    top: -8px;
+    -webkit-transition: all 0.25s;
+    -moz-transition: all 0.25s;
+    -o-transition: all 0.25s;
+    transition: all 0.25s linear;
+    left: 100%;
+    opacity: 1;
+    filter: alpha(opacity=0);
+    visibility: visible;
+}
+
+.viewSearch{
+    position: absolute;
+    background-color: white;
+    box-shadow: 0px 2px 9px 3px rgba(0, 0, 0, 0.1);
+    top: 40px;
+    left: 0;
+    right: 0;
+    height: 400px;
+    z-index: 2000;
+}
+
+.showSearch{
+    display: flex;
+    padding: 10px;
+}
+.search-img{
+    width: 80px;
+    height: 90px;
+    box-sizing: border-box;
+}
+.search-heading, .search-author{
+    text-align: left !important;
+}
+.search-content{
+    margin-left: 10px;
+}
+.position-search{
+    position: relative;
+    height: 370px;
+    overflow: auto;
+}
+.viewAllSearch{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+.viewAllSearch a {
+    text-align: center !important;
+    line-height: 30px
+}
+.header-product{
+    display: flex;
+    align-items: center;
+}
+.header-product-img{
+    width: 60px;
+}
+.header-product-content{
+    padding: 0 20px;
+}
+.header-product-content h6, .header-product-content p{
+    margin: 0;
+}
+.header-quantity{
+    margin: 0 10px;
+}
+.header-scroll{
+    height: 340px;
+    overflow: auto;
+    min-width: 400px;
+}
+.header-product-content{
+    width: 200px;
+}
+.header-quantity{
+    width: 100px;
+}
+
+.header-in-number{
+    position: absolute;
+    bottom: 12px;
+    width: 24px;
+    height: 24px;
+    background-color: red !important;
+    color: white;
+    border-radius: 50%;
+    z-index: 1000;
+}
+.notification-item{
+    width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    transition: background-color 0.3s linear;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+.notification-item:hover{
+    background-color: aliceblue;
+}
+.fa-star{
+    color: yellow; 
+  }
+  
