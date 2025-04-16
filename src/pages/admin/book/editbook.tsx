@@ -58,7 +58,7 @@ const Editbook: React.FC = () => {
   const uploadImageState = useCallback((image: File) => {
     setImageFile(image);
   }, []);
-  const { loading, error } = useQuery(getAuthors);
+  const { loading, error, data } = useQuery(getAuthors);
   const { loading: loading2, error: error2, data: data2 } = useQuery(getGenres);
   if (loading || loading1 || loading2) {
     return <Spin size="large" />;
@@ -116,7 +116,6 @@ const Editbook: React.FC = () => {
     <div>
       <Form
         form={form}
-        style={{ overflow: "auto" }}
         name="dynamic_form_nest_item"
         onFinish={onFinish}
         autoComplete="off"
@@ -162,14 +161,14 @@ const Editbook: React.FC = () => {
               }}
             />
           </Col>
-        </Row>
-        <Form.Item name="image" label="Sửa ảnh">
-          <Uploadimage
-            imageData={imageDefault}
-            uploadImageState={uploadImageState}
-          />
-        </Form.Item>
-        <Row gutter={[12, 12]}>
+          <Col span={24}>
+            <Form.Item name="image" label="Sửa ảnh">
+              <Uploadimage
+                imageData={imageDefault}
+                uploadImageState={uploadImageState}
+              />
+            </Form.Item>
+          </Col>
           <Col span={12}>
             <SelectFormItem
               formItemProps={{
@@ -196,20 +195,21 @@ const Editbook: React.FC = () => {
                 rules: [{ required: true, message: "Bạn phải chọn tác giả" }],
               }}
               selectProps={{
-                options: data2?.genres.map((genre: any) => ({
-                  value: genre.id,
-                  label: genre.name,
+                options: data?.authors.map((author: any) => ({
+                  value: author.id,
+                  label: author.name,
                 })),
                 placeholder: "Chọn tác giả",
               }}
             />
           </Col>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
         </Row>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
       </Form>
     </div>
   );

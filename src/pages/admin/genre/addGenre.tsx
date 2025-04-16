@@ -1,11 +1,12 @@
 import { useMutation } from "@apollo/client";
-import { Button, Form, Input, Spin } from "antd";
+import { Button, Col, Form, Row, Spin } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { toastDefault } from "@/common/toast";
 import { addSingleGenre } from "@/graphql-client/mutations.tsx";
 import { getBooks, getGenres } from "@/graphql-client/query.tsx";
 import "./form.css";
+import { InputFormItem } from "@/components/atoms/input-form-item";
 
 const Addauthor: React.FC = () => {
   const navigate = useNavigate();
@@ -32,14 +33,21 @@ const Addauthor: React.FC = () => {
         name="dynamic_form_nest_item"
         onFinish={onFinish}
         autoComplete="off"
+        layout="vertical"
       >
-        <Form.Item
-          name="name"
-          label="Tên thể loại"
-          rules={[{ required: true, message: "Bạn phải nhập tên thể loại" }]}
-        >
-          <Input />
-        </Form.Item>
+        <Row gutter={[12, 12]}>
+          <Col span={24}>
+            <InputFormItem
+              formItemProps={{
+                name: "name",
+                label: "Tên thể loại",
+                rules: [
+                  { required: true, message: "Bạn phải nhập tên thể loại" },
+                ],
+              }}
+            />
+          </Col>
+        </Row>
         <Form.Item>
           <Button type="primary" htmlType="submit">
             Submit

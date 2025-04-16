@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { Button, Form, Input, Select, Spin } from "antd";
+import { Button, Col, Form, Row, Spin } from "antd";
 import {
   getDownloadURL,
   getStorage,
@@ -15,8 +15,10 @@ import { addSingleBook } from "@/graphql-client/mutations.tsx";
 import { getAuthors, getBooks, getGenres } from "@/graphql-client/query.tsx";
 import Uploadimage from "../uploadimage";
 import "./form.css";
-
-const { Option } = Select;
+import { InputFormItem } from "@/components/atoms/input-form-item";
+import { TextAreaFormItem } from "@/components/atoms/text-area-form-item";
+import { InputCurrencyFormItem } from "@/components/atoms/input-currency-form-item";
+import { SelectFormItem } from "@/components/atoms/select-form-item";
 
 const Addbook: React.FC = () => {
   const navigate = useNavigate();
@@ -70,80 +72,94 @@ const Addbook: React.FC = () => {
   return (
     <div>
       <Form
-        style={{ overflow: "auto" }}
         name="dynamic_form_nest_item"
         onFinish={onFinish}
         autoComplete="off"
+        layout="vertical"
       >
-        <Form.Item
-          name="name"
-          label="Tên sách"
-          rules={[{ required: true, message: "Bạn phải nhập Tên sách" }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          name="des"
-          label="Mô tả"
-          rules={[{ required: true, message: "Bạn phải nhập mô tả sản phẩm" }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          name="price"
-          label="Giá tiền"
-          rules={[
-            {
-              required: true,
-              message: "Bạn phải nhập giá tiền cho sản phẩm này",
-            },
-          ]}
-        >
-          <Input type="number" />
-        </Form.Item>
-        <Form.Item
-          name="genreId"
-          label="Thể loại chuyện"
-          rules={[{ required: true, message: "Bạn phải nhập thể loại truyện" }]}
-        >
-          <Select defaultValue="lucy">
-            <Option value="lucy" disabled>
-              Chọn thể loại
-            </Option>
-            {data1?.genres.map((genre: any) => (
-              <Option key={genre.id} value={genre.id}>
-                {genre.name}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item name="image" label="Thêm ảnh">
-          <Uploadimage imageData={""} uploadImageState={uploadImageState} />
-        </Form.Item>
-        <Form.Item name="quantity" label="Thêm số lượng">
-          <Input type="number" />
-        </Form.Item>
-        <Form.Item
-          name="authorId"
-          label="Tác giả"
-          rules={[{ required: true, message: "Bạn phải nhập tác giả" }]}
-        >
-          <Select defaultValue="lucy">
-            <Option value="lucy" disabled>
-              Chọn tác giả
-            </Option>
-            {data.authors.map((author: any) => (
-              <Option key={author.id} value={author.id}>
-                {author.name}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
+        <Row gutter={[12, 12]}>
+          <Col span={24}>
+            <InputFormItem
+              formItemProps={{
+                name: "name",
+                label: "Tên sách",
+                rules: [{ required: true, message: "Bạn phải nhập Tên sách" }],
+              }}
+            />
+          </Col>
+          <Col span={24}>
+            <TextAreaFormItem
+              formItemProps={{
+                name: "des",
+                label: "Mô tả",
+                rules: [{ required: true, message: "Bạn phải nhập mô tả" }],
+              }}
+            />
+          </Col>
+          <Col span={12}>
+            <InputCurrencyFormItem
+              formItemProps={{
+                name: "price",
+                label: "Giá tiền",
+                rules: [{ required: true, message: "Bạn phải nhập giá tiền" }],
+              }}
+            />
+          </Col>
+          <Col span={12}>
+            <InputCurrencyFormItem
+              formItemProps={{
+                name: "quantity",
+                label: "Số lượng",
+                rules: [{ required: true, message: "Bạn phải nhập số lượng" }],
+              }}
+            />
+          </Col>
+          <Col span={24}>
+            <Form.Item name="image" label="Thêm ảnh">
+              <Uploadimage imageData={""} uploadImageState={uploadImageState} />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <SelectFormItem
+              formItemProps={{
+                name: "genreId",
+                label: "Thể loại chuyện",
+                rules: [
+                  { required: true, message: "Bạn phải chọn thể loại truyện" },
+                ],
+              }}
+              selectProps={{
+                options: data1?.genres.map((genre: any) => ({
+                  value: genre.id,
+                  label: genre.name,
+                })),
+                placeholder: "Chọn thể loại chuyện",
+              }}
+            />
+          </Col>
+          <Col span={12}>
+            <SelectFormItem
+              formItemProps={{
+                name: "authorId",
+                label: "Tác giả",
+                rules: [{ required: true, message: "Bạn phải chọn tác giả" }],
+              }}
+              selectProps={{
+                options: data?.authors.map((author: any) => ({
+                  value: author.id,
+                  label: author.name,
+                })),
+                placeholder: "Chọn tác giả",
+              }}
+            />
+          </Col>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Row>
       </Form>
     </div>
   );

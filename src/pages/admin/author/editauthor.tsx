@@ -47,6 +47,7 @@ const Editauthor: React.FC = () => {
         name="dynamic_form_nest_item"
         onFinish={onFinish}
         autoComplete="off"
+        layout="vertical"
       >
         <Form.Item
           name="name"

@@ -12,8 +12,6 @@ import { getBooks, getOrders } from "@/graphql-client/query.tsx";
 
 const { Search } = Input;
 
-interface Props {}
-
 const columns = [
   {
     title: "Tên khách hàng",
@@ -49,7 +47,7 @@ const columns = [
   },
 ];
 
-const CartAdmin = (props: Props) => {
+const CartAdmin = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<Array<string>>([]);
   const { loading, error, data } = useQuery(getOrders);
   const {
