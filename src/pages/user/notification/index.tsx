@@ -11,7 +11,7 @@ interface Props {
 const History = (props: Props) => {
     const notifications = useSelector((state: any) => state.notifications.notifications);
     const user = useSelector((state: any) => state.auth.user)
-    debugger;
+     
     if(user?.email){
         return (
             <div>

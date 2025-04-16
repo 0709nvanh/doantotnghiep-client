@@ -46,7 +46,51 @@
     visibility: hidden;
 }
 
+.menu-active{
+    opacity: 1;
+    visibility: visible;
+}
+
+.menu-active::after{
+    content: "";
+    border-left: 4px solid #b9520a;
+    border-bottom: 4px solid #b9520a;
+    border-top: 4px solid transparent;
+    border-right: 4px solid transparent;
+    position: absolute;
+    top: -8px;
+    -webkit-transition: all 0.25s;
+    -moz-transition: all 0.25s;
+    -o-transition: all 0.25s;
+    transition: all 0.25s linear;
+    left: 100%;
+    opacity: 1;
+    visibility: visible;
+}
+
+.menu-active::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #f07c29;
+    -webkit-transition: all 0.25s;
+    -moz-transition: all 0.25s;
+    -o-transition: all 0.25s;
+    transition: all 0.25s linear;
+    opacity: 1;
+    visibility: visible;
+    z-index: 10;
+}
+
+
 .menu-item:hover .spanhover{
+    width: 150px;
+}
+
+.menu-active .spanhover{
     width: 150px;
 }
 

@@ -18,7 +18,7 @@ import { useQuery } from '@apollo/client';
 import { Button, Col, Dropdown, Input, Menu, Row, Spin, Typography } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import formatprice from '../../common/formatprice';
 import { logout } from '../../features/auths/authSlice';
 import { getBooks } from '../../graphql-client/query';
@@ -63,8 +63,7 @@ const Header = (props: Props) => {
     let total = 0;
 
     const { width } = useWindowDimensions();
-    console.log(width);
-    
+    const location = useLocation();
 
     if (carts.length > 0) {
         carts.forEach((cart: any) => {
@@ -292,7 +291,7 @@ const Header = (props: Props) => {
                 </Col>
             </Row>
             <Row style={{ backgroundColor: 'black', justifyContent: 'center', padding: "0 40px" }}>
-                <Col span={3} className="menu-item">
+                <Col span={3} className={`menu-item ${location.pathname === '/' ? 'menu-active' : ''}`}>
                     <NavLink to="/" style={{ color: 'white', display: 'block' }}>
                         <Typography.Title style={{ margin: 0, zIndex: 2, color: 'white' }} level={5} >
                         {width < responesiveWidth ? <HomeOutlined style={{ width: '40px'}}/> : 'Trang chủ'}
@@ -300,7 +299,7 @@ const Header = (props: Props) => {
                     </NavLink>
                     <span className="spanhover"></span>
                 </Col>
-                <Col span={3} className="menu-item">
+                <Col span={3} className={`menu-item ${location.pathname === '/shop' ? 'menu-active' : ''}`}>
                     <NavLink to="/shop" style={{ color: 'white', display: 'block' }}>
                         <Typography.Title style={{ margin: 0, zIndex: 2, color: 'white' }} level={5} >
                         {width < responesiveWidth ? <ShopOutlined style={{ width: '40px'}}/> : 'Cửa hàng'}
@@ -308,7 +307,7 @@ const Header = (props: Props) => {
                     </NavLink>
                     <span className="spanhover"></span>
                 </Col>
-                <Col span={3} className="menu-item">
+                <Col span={3} className={`menu-item ${location.pathname === '/category' ? 'menu-active' : ''}`}>
                     <NavLink to="/category" style={{ color: 'white', display: 'block' }}>
                         <Typography.Title style={{ margin: 0, zIndex: 2, color: 'white' }} level={5} >
                         {width < responesiveWidth ? <MenuOutlined style={{ width: '40px'}}/> : 'Danh mục'}
@@ -316,7 +315,7 @@ const Header = (props: Props) => {
                     </NavLink>
                     <span className="spanhover"></span>
                 </Col>
-                <Col span={3} className="menu-item">
+                <Col span={3} className={`menu-item ${location.pathname === '/about-us' ? 'menu-active' : ''}`}>
                     <NavLink to="/about-us" style={{ color: 'white', display: 'block' }}>
                         <Typography.Title style={{ margin: 0, zIndex: 2, color: 'white' }} level={5} >
                         {width < responesiveWidth ? <InfoCircleOutlined style={{ width: '40px'}}/> : 'Giới thiệu'}
@@ -324,7 +323,7 @@ const Header = (props: Props) => {
                     </NavLink>
                     <span className="spanhover"></span>
                 </Col>
-                <Col span={3} className="menu-item">
+                <Col span={3} className={`menu-item ${location.pathname === '/contact-us' ? 'menu-active' : ''}`}>
                     <NavLink to="/contact-us" style={{ color: 'white', display: 'block' }}>
                         <Typography.Title style={{ margin: 0, zIndex: 2, color: 'white' }} level={5} >
                         {width < responesiveWidth ? <PhoneOutlined style={{ width: '40px'}}/> : 'Liên hệ'}

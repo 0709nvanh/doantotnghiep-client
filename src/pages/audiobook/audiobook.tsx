@@ -1,15 +1,5 @@
-import React from 'react'
+const Audiobook = () => {
+  return <div></div>;
+};
 
-interface Props {
-    
-}
-
-const Audiobook = (props: Props) => {
-    return (
-        <div>
-            
-        </div>
-    )
-}
-
-export default Audiobook
+export default Audiobook;

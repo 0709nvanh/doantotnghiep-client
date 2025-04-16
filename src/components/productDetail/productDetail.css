@@ -64,7 +64,10 @@ a:hover {
       width: 60px;
       border-radius: 5px;
       text-align: center;
-      background: #333;
+      background: -webkit-linear-gradient(to right, #e1ddd8 0%, #fffbf6 100%);
+      background: -moz-linear-gradient(to right, #e1ddd8 0%, #fffbf6 100%);
+      background: -ms-linear-gradient(to right, #e1ddd8 0%, #fffbf6 100%);
+      background: linear-gradient(to right, #e1ddd8 0%, #fffbf6 100%);
       color: white;
   }
 
