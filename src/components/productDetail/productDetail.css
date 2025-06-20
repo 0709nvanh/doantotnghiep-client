@@ -100,7 +100,7 @@ i {
 }
 .ratings {
 	display: flex;
-	justify-content: center;
+	justify-content: left;
 }
 
 .rate {

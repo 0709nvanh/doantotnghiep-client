@@ -232,7 +232,7 @@ const ProductDetail = (props: Props) => {
                     {data?.book?.des}
                   </span>
                 </div>
-                <div className="price fw-bold ">
+                <div className="price fw-bold text-left mt-3">
                   <p>Số lượng có: {data?.book?.quantity}</p>
                 </div>
                 <div className="d-flex align-items-center baseline mt-5">
@@ -328,7 +328,7 @@ const ProductDetail = (props: Props) => {
                 {!isCmt ? "Xem bình luận" : "Đóng bình luận"}
               </Button>
               {isCmt && (
-                <div>
+                <div className="text-left">
                   {data2.comments?.length > 0 ? (
                     data2?.comments.map((cmt: any) => (
                       <>
@@ -384,8 +384,8 @@ const ProductDetail = (props: Props) => {
                     </span>
                   )}
 
-                  <div>
-                    <div>Viết bình luận cho tác phẩm {data?.book?.name}</div>
+                  <div className="text-left">
+                    <div className="mb-2">Viết bình luận cho tác phẩm {data?.book?.name}</div>
                     <div style={{ display: "flex", width: "100%" }}>
                       <Form
                         style={{ width: "100%" }}
@@ -416,7 +416,7 @@ const ProductDetail = (props: Props) => {
               )}
 
               {/* End content-product */}
-              <div className="container mt-5">
+              <div className="container mt-5 text-left">
                 <div className="d-flex justify-content-evenly border-top pt-4">
                   <div className="description">
                     <p className="border-bottom border-4 border-warning">
@@ -450,7 +450,7 @@ const ProductDetail = (props: Props) => {
                               to={"/" + data.book.author.slug + "/" + book.slug}
                               className="product-relate-content"
                             >
-                              <div className="text-center">
+                              <div className="text-left">
                                 <img
                                   width="100%"
                                   height="300"
@@ -459,11 +459,11 @@ const ProductDetail = (props: Props) => {
                                   alt=""
                                 />
                               </div>
-                              <div className="fw-bold mt-2">
+                              <div className="fw-bold mt-2 ">
                                 <p>{book.name}</p>
                               </div>
                               <div className="d-flex justify-content-between">
-                                <div className="ratings text-center">
+                                <div className="ratings text-left">
                                   <p>
                                     <i className=" fa fa-star" />
                                   </p>
@@ -481,7 +481,7 @@ const ProductDetail = (props: Props) => {
                                   </p>
                                 </div>
 
-                                <div className="price fw-bold text-center">
+                                <div className="price fw-bold text-left">
                                   <p>{formatprice(book.price)}</p>
                                 </div>
                               </div>
@@ -496,17 +496,17 @@ const ProductDetail = (props: Props) => {
             </div>
           </div>
           <div className="col-3">
-            <div className="top-">
-              <div className="top--title">
+            <div className="top- text-left">
+              <div className="top-title">
                 <h5>TOP SẢN PHẨM</h5>
               </div>
-              <div className="d-grid justify-content-between">
+              <div className="d-grid justify-content-between ms-2">
                 <div className="row">
                   {bookTopQuery.length > 0 &&
                     bookTopQuery.map((book) => {
                       if (book?.id) {
                         return (
-                          <Card key={book.id} hoverable className="mb-2">
+                          <Card key={book.id} hoverable className="mb-2 p-0">
                             <Link
                               to={"/" + book?.author?.slug + "/" + book?.slug}
                               className="d-flex col-12 mt-3"
@@ -551,13 +551,6 @@ const ProductDetail = (props: Props) => {
                       }
                       return null;
                     })}
-                </div>
-                {/* End Sản phẩm nổi bật */}
-                <div className=" mt-4">
-                  <h4>COMPARE</h4>
-                  <div>
-                    <span>No products to compare</span>
-                  </div>
                 </div>
               </div>
             </div>
