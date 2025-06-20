@@ -1,3 +1,4 @@
+import { toastDefault } from '@/common/toast'
 import { createSlice } from '@reduxjs/toolkit'
 
 export interface AuthState {

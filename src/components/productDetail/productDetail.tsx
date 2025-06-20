@@ -2,7 +2,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { Button, Card, Form, Input, Spin } from "antd";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y, Navigation, Pagination, Scrollbar } from "swiper/modules";
@@ -24,9 +24,10 @@ import { addComments, deleteComment } from "../../graphql-client/mutations";
 
 const { TextArea } = Input;
 
-interface Props {}
+interface Props { }
 
 const ProductDetail = (props: Props) => {
+  const navigate = useNavigate();
   const { slugProduct } = useParams();
   const [value1, setValue] = useState("");
   const dispatch = useDispatch();
@@ -144,10 +145,14 @@ const ProductDetail = (props: Props) => {
   };
 
   const onFinish = (values: any) => {
-    // alert("Chức năng đang phát triển");
+    if (!user?.email) {
+      toastError("Vui lớng đăng nhập");
+      navigate("/login");
+      return;
+    }
     values.icon = 1;
     values.bookId = data?.book?.id;
-    values.email = user.email;
+    values.email = user?.email;
     add({
       variables: values,
       refetchQueries: [
@@ -161,28 +166,12 @@ const ProductDetail = (props: Props) => {
 
   return (
     <div>
-      <div className="container-fuild header-bottom">
-        <div className="container">
-          <div className="d-flex justify-content-between aligns-items-center">
-            <div className="header-product-text py-2">
-              <h1
-                className="page-header-title clr"
-                style={{ color: "black", marginBottom: 0 }}
-                itemProp="headline"
-              >
-                {data?.book?.name}
-              </h1>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* End header-Bottom */}
       <div className="container pt-5">
         <div className="row justify-content-start">
           <div className="col-9">
             <div className="row">
               <div className="col-5">
-                <div className="product-img">
+                <div className="product-img w-full">
                   <img
                     style={{ width: 300, height: 500, objectFit: "cover" }}
                     src={imageFocus ? imageFocus : images[0]}
@@ -196,7 +185,7 @@ const ProductDetail = (props: Props) => {
                     modules={[Navigation, Pagination, Scrollbar, A11y]}
                     spaceBetween={10}
                     slidesPerView={4}
-                    // navigation
+                  // navigation
                   >
                     {images.map((image: string) => (
                       <SwiperSlide
@@ -258,7 +247,7 @@ const ProductDetail = (props: Props) => {
                         type="number"
                         min="1"
                         max="20"
-                        className="in-num num1234 form-control"
+                        className="in-num num1234 form-control text-black"
                       />
                       <span onClick={handleClickTang} className="plus">
                         +
@@ -346,7 +335,7 @@ const ProductDetail = (props: Props) => {
                         <div style={{ display: "flex", alignItems: "center" }}>
                           <div style={{ display: "flex" }}>
                             <img
-                              src={cmt.user.avatar}
+                              src={cmt?.user?.avatar}
                               style={{
                                 width: 40,
                                 height: 40,
@@ -360,7 +349,7 @@ const ProductDetail = (props: Props) => {
                                 fontWeight: "bold",
                               }}
                             >
-                              Nguyễn Ngọc Dũng
+                              {cmt?.user?.name}
                             </div>
                           </div>
                         </div>
@@ -380,12 +369,12 @@ const ProductDetail = (props: Props) => {
                           >
                             {cmt.content}
                           </span>
-                          <Button
+                          {user?.id === cmt?.user?.id && <Button
                             style={{ margin: 30 }}
                             onClick={() => onRemove(cmt.id, cmt.user.id)}
                           >
                             Xóa bình luận
-                          </Button>
+                          </Button>}
                         </div>
                       </>
                     ))

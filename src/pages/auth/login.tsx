@@ -47,7 +47,6 @@ function Login() {
     } else {
       navigate("/");
     }
-    toastDefault("Đăng nhập thành công");
   }
 
   const handleGgLogin = () => {
