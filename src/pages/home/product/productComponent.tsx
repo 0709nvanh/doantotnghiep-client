@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Spin } from 'antd';
+import { Spin, Row, Col } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getBooks } from '../../../graphql-client/query';
@@ -26,11 +26,8 @@ const ProductComponent = (props: Props) => {
         }
     }
 
-   
-    
-
     return (
-        <div className="" style={{width: '100%'}}>
+        <div style={{width: '100%'}}>
             <div className="component-product">
                 <ul className="align">
                     {/* 1 sản phẩm */}
@@ -50,7 +47,7 @@ const ProductComponent = (props: Props) => {
                                             <ul className="page">
                                                 <li />
                                                 <li>
-                                                    <Link to={book?.author?.slug + "/" + book?.slug} className="btn">Xem chi tết</Link>
+                                                    <Link to={book?.author?.slug + "/" + book?.slug} className="btn">Xem chi tiết</Link>
                                                 </li>
                                                 <li />
                                                 <li />
@@ -65,7 +62,7 @@ const ProductComponent = (props: Props) => {
                                                 <li />
                                             </ul>
                                             <figcaption>
-                                                <h1>{book?.name}</h1>
+                                                <h1 className='text-white'>{book?.name}</h1>
                                                 <span>By {book?.author?.name}</span>
                                                 <p className="muti-text" style={{color: "white"}}>
                                                     {book?.des}
@@ -77,10 +74,8 @@ const ProductComponent = (props: Props) => {
                             }else{
                                 return null;
                             }
-                            
                         })
                     }
-
                     {/* hết 1 sản phẩm*/}
                 </ul>
             </div>

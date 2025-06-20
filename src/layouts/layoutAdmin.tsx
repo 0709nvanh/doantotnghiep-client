@@ -47,7 +47,18 @@ const LayoutAdmin: React.FC = () => {
     return (
         <Layout>
             <Header className="header">
-                <Button onClick={logoutAdmin}>Đăng xuất</Button>
+                <div className='flex items-center justify-between'>
+                <div className='flex justify-start w-full'>
+                <Link to={"/"}>
+                            <img
+                                width="200"
+                                src="https://skybook.woovina.net/demo-01/wp-content/uploads/2018/12/logo.png"
+                                alt=""
+                            />
+                        </Link>
+                </div>
+                    <Button onClick={logoutAdmin}>Đăng xuất</Button>
+                </div>
             </Header>
             <Row>
                 <Col span={5}>
@@ -57,12 +68,12 @@ const LayoutAdmin: React.FC = () => {
                         defaultOpenKeys={['sub1']}
                         mode="inline"
                     >
-                        <SubMenu key="sub1" icon={<UserOutlined />} title="User">
+                        <SubMenu key="sub1" icon={<UserOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />} title="User">
                             <Menu.Item key="1">
                                 <Link to="/admin/user">Thống kê người dùng</Link>
                             </Menu.Item>
                         </SubMenu>
-                        <SubMenu key="sub9" icon={<SettingOutlined />} title="Thể loại">
+                        <SubMenu key="sub9" icon={<SettingOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />} title="Thể loại">
                             <Menu.Item key="2">
                                 <Link to="/admin/genre">Thống kê thể loại</Link>
                             </Menu.Item>
@@ -70,7 +81,7 @@ const LayoutAdmin: React.FC = () => {
                                 <Link to="/admin/addgenre">Thêm thể loại</Link>
                             </Menu.Item>
                         </SubMenu>
-                        <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Tác giả">
+                        <SubMenu key="sub2" icon={<AppstoreOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />} title="Tác giả">
                             <Menu.Item key="3">
                                 <Link to="/admin/authors">Thống kê tác giả</Link>
                             </Menu.Item>
@@ -78,7 +89,7 @@ const LayoutAdmin: React.FC = () => {
                                 <Link to="/admin/addauthor">Thêm tác giả</Link>
                             </Menu.Item>
                         </SubMenu>
-                        <SubMenu key="sub3" icon={<SettingOutlined />} title="Sản phẩm sách">
+                        <SubMenu key="sub3" icon={<SettingOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />} title="Sản phẩm sách">
                             <Menu.Item key="5">
                                 <Link to="/admin/books">Thống kê sách</Link>
                             </Menu.Item>
@@ -86,12 +97,12 @@ const LayoutAdmin: React.FC = () => {
                                 <Link to="/admin/addbook">Thêm sách</Link>
                             </Menu.Item>
                         </SubMenu>
-                        <SubMenu key="sub6" icon={<SettingOutlined />} title="Đơn đặt hàng">
+                        <SubMenu key="sub6" icon={<SettingOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />} title="Đơn đặt hàng">
                             <Menu.Item key="10">
                                 <Link to="/admin/cart">Thống kê đơn đặt hàng</Link>
                             </Menu.Item>
                         </SubMenu>
-                        <SubMenu key="sub5" icon={<SettingOutlined />} title="Bình luận">
+                        <SubMenu key="sub5" icon={<SettingOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />} title="Bình luận">
                             <Menu.Item key="8">
                                 <Link to="/admin/comments">Thống kê bình luận</Link>
                             </Menu.Item>

@@ -142,19 +142,18 @@ const HistoryItem = (props: Props) => {
     let html = null;
     if (status === 2) {
       html = (
-        <div className="d-flex align-items-center justify-content-between">
+        <div className="d-flex align-items-center justify-content-between gap-2">
           <Button type="primary" onClick={() => showModal(lien_he_shop)}>
             Liên hệ shop
           </Button>
           <Button onClick={() => handleRemoveOrder(id)} danger>
             Hủy đơn hàng
           </Button>
-          <Button>Xuất Hóa Đơn</Button>
         </div>
       );
     } else if (status === 3) {
       html = (
-        <div className="d-flex align-items-center justify-content-between">
+        <div className="d-flex align-items-center justify-content-between gap-2">
           <Button type="primary" onClick={() => handleUpdateOrder(id, status)}>
             Xác nhận đã nhận hàng
           </Button>
@@ -165,7 +164,7 @@ const HistoryItem = (props: Props) => {
       );
     } else if (status === 4) {
       html = (
-        <div className="d-flex align-items-center justify-content-between">
+        <div className="d-flex align-items-center justify-content-between gap-2">
           <Button type="primary" onClick={() => showModal(mua_lai)} danger>
             Mua lại
           </Button>
@@ -185,7 +184,7 @@ const HistoryItem = (props: Props) => {
       );
     } else if (status === 5) {
       html = (
-        <div className="d-flex align-items-center justify-content-between">
+        <div className="d-flex align-items-center justify-content-between gap-2">
           <Button type="primary" onClick={() => showModal(mua_lai)} danger>
             Mua lại
           </Button>
@@ -199,7 +198,7 @@ const HistoryItem = (props: Props) => {
       );
     } else {
       html = (
-        <div className="d-flex align-items-center justify-content-between">
+        <div className="d-flex align-items-center justify-content-between gap-2">
           <Button onClick={() => handleUpdateOrder(id, status)} type="primary">
             Xác nhận đơn hàng
           </Button>
@@ -503,10 +502,9 @@ const HistoryItem = (props: Props) => {
         </p>
       </div>
       <div className="btn-history py-3">
-        <Row>
-          <Col span={14}></Col>
-          <Col span={10}>{showBtnStatus(order.status, order.id)}</Col>
-        </Row>
+        <div className="flex justify-end">
+          <div>{showBtnStatus(order.status, order.id)}</div>
+        </div>
       </div>
 
       <Modal

@@ -1,9 +1,8 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
-import Header from "../components/header/header";
-import Footer from '../components/footer/footer';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from "react-router-dom";
+import Footer from '../components/footer/footer';
+import Header from "../components/header/header";
 
 const LayoutWebsite: React.FC = () => {
   const navigate = useNavigate();
@@ -13,7 +12,7 @@ const LayoutWebsite: React.FC = () => {
     if(user?.role === 1){
         navigate('/admin')
     }
-  }, [user, navigate])
+  }, [user?.role])
   return (
     <div>
       <Header />

@@ -30,6 +30,7 @@ html {
 }
 
 .component-product{
+  padding: 60px 0;
   background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/fs/c221c957092339.59c8dfa58d6d7.jpg');
 }
 ul {

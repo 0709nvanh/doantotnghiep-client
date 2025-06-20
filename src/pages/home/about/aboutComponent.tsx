@@ -29,8 +29,8 @@ const AboutComponent = () => {
           alt=""
         />
       </div>
-      <Row className="about-content">
-        <Col span={8}>
+      <Row className="about-content" gutter={[16, 16]} justify="center" style={{maxWidth: 1200, width: '100%', margin: '20px auto', padding: '0 8px'}}>
+        <Col xs={24} md={8} style={{marginBottom: 16}}>
           <div className="image">
             <div className="image-hover">
               <img
@@ -40,7 +40,7 @@ const AboutComponent = () => {
             </div>
           </div>
         </Col>
-        <Col span={8}>
+        <Col xs={24} md={8} style={{marginBottom: 16}}>
           <div className="image">
             <div className="image-hover">
               <img
@@ -50,26 +50,27 @@ const AboutComponent = () => {
             </div>
           </div>
         </Col>
-        <Col span={8}>
-          <Row>
+        <Col xs={24} md={8}>
+          <Row gutter={[8, 8]}>
             {productPage.length > 0 &&
               productPage.map((book) => {
                 if (book?.id) {
                   return (
                     <Col
                       key={book.id}
-                      span={12}
-                      style={{ boxSizing: "border-box" }}
+                      xs={12}
+                      style={{ boxSizing: "border-box", marginBottom: 8 }}
                     >
                       <Link
                         to={book?.author?.slug + "/" + book?.slug}
                         className="mx-2"
                       >
                         <img
-                          width="150"
-                          height="220"
+                          width="100%"
+                          height="auto"
                           src={JSON.parse(book.image)}
                           alt=""
+                          style={{maxWidth: 150}}
                         />
                         <Typography.Title level={5} style={{ margin: 0 }}>
                           {book.name}

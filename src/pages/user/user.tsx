@@ -1,6 +1,5 @@
 import { BellOutlined, FormOutlined, SolutionOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Col, Row } from 'antd'
-import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link, Outlet } from 'react-router-dom'
 
@@ -18,19 +17,19 @@ const UserPage = (props: Props) => {
                         <Avatar size={54} src={user.avatar} />
                         <div>
                             <p className="m-0">{user.name}</p>
-                            <Link to="/user/profile" className="d-flex align-items-center"><FormOutlined className="me-2" /> Sửa hồ sơ</Link>
+                            <Link to="/user/profile" className="d-flex align-items-center"><FormOutlined className="me-2" onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} /> Sửa hồ sơ</Link>
                         </div>
                     </div>
-                    <Link to="profile" className="d-flex align-items-center mb-3">
-                        <UserOutlined style={{ fontSize: "24px" }} />
+                    <Link to="/user/profile" className="d-flex align-items-center mb-3">
+                        <UserOutlined style={{ fontSize: "24px" }} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                         <p className="m-0 ms-2">Tài khoản của tôi</p>
                     </Link>
-                    <Link to="history" className="d-flex align-items-center mb-3">
-                        <SolutionOutlined style={{ fontSize: "24px" }} />
+                    <Link to="/user/history" className="d-flex align-items-center mb-3">
+                        <SolutionOutlined style={{ fontSize: "24px" }} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                         <p className="m-0 ms-2">Đơn mua</p>
                     </Link>
-                    <Link to="notifications" className="d-flex align-items-center mb-3">
-                        <BellOutlined style={{ fontSize: "24px" }} />
+                    <Link to="/user/notifications" className="d-flex align-items-center mb-3">
+                        <BellOutlined style={{ fontSize: "24px" }} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                         <p className="m-0 ms-2">Thông báo</p>
                     </Link>
                 </Col>
