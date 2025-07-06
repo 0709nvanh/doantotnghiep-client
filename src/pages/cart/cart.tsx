@@ -1,7 +1,7 @@
 import { DeleteOutlined } from "@ant-design/icons";
 import { useMutation } from "@apollo/client";
-import { Button, Form, Input, Spin, Table } from "antd";
-import { useEffect, useState } from "react";
+import { Button, Form, Input, Spin, Table, Modal } from "antd";
+import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import formatprice from "@/common/formatprice";
 import { toastDefault } from "@/common/toast";
@@ -55,21 +55,32 @@ const Cart = () => {
   const carts = useSelector((state: any) => state.cart.carts);
   const [total, setTotal] = useState(0);
   const [add, Mutation] = useMutation<any>(createOrder);
+  const hasShownToast = useRef(false);
+
   useEffect(() => {
     if (!user) return;
     form.setFieldsValue(user);
   }, [form, user]);
+
+  useEffect(() => {
+    if (Mutation.data?.createOrder && !hasShownToast.current) {
+      dispatch(addNotification(Mutation.data?.createOrder));
+      hasShownToast.current = true;
+    }
+  }, [Mutation.data, dispatch]);
+
+  useEffect(() => {
+    hasShownToast.current = false;
+  }, []);
+
   const start = () => {
     setTimeout(() => {
       setSelectedRowKeys([]);
     }, 1000);
   };
+
   if (Mutation.loading) {
     return <Spin size="large" />;
-  }
-
-  if (Mutation.data?.createOrder) {
-    dispatch(addNotification(Mutation.data?.createOrder));
   }
 
   const data: any[] | undefined = [];
@@ -122,10 +133,17 @@ const Cart = () => {
   };
 
   const remove = (id: String) => {
-    if (window.confirm("Are you sure you want to remove")) {
-      dispatch(removeCart(id));
-      toastDefault("Xóa thành công");
-    }
+    Modal.confirm({
+      title: 'Xác nhận xóa',
+      content: 'Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?',
+      okText: 'Xóa',
+      okType: 'danger',
+      cancelText: 'Hủy',
+      onOk() {
+        dispatch(removeCart(id));
+        toastDefault("Xóa thành công");
+      },
+    });
   };
 
   const hasSelected = selectedRowKeys.length > 0;

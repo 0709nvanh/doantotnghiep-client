@@ -7,7 +7,7 @@ import {
   uploadBytes,
   uploadBytesResumable,
 } from "firebase/storage";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "@/common/firebase/index";
 import { toastDefault } from "@/common/toast.tsx";
@@ -24,17 +24,36 @@ const Addbook: React.FC = () => {
   const navigate = useNavigate();
   const [add, Mutation] = useMutation<any>(addSingleBook);
   const [imageFile, setImageFile] = useState<any>([]);
+  const hasShownToast = useRef(false);
+
   const uploadImageState = useCallback((image: File) => {
     setImageFile(image);
   }, []);
+
   const { loading, error, data } = useQuery(getAuthors);
   const { loading: loading1, error: error1, data: data1 } = useQuery(getGenres);
+
+  // Xử lý thêm sách thành công
+  useEffect(() => {
+    if (Mutation.data && !hasShownToast.current) {
+      toastDefault("Thêm sách thành công");
+      hasShownToast.current = true;
+      navigate("/admin/books");
+    }
+  }, [Mutation.data, navigate]);
+
+  // Reset toast flag khi component mount
+  useEffect(() => {
+    hasShownToast.current = false;
+  }, []);
+
   if (loading || loading1) {
     return <Spin size="large" />;
   }
   if (error || error1) {
     return <p>error authors ...</p>;
   }
+
   const onFinish = async (values: any) => {
     values.price = Number(values.price);
     values.quantity = Number(values.quantity);
@@ -62,13 +81,11 @@ const Addbook: React.FC = () => {
       refetchQueries: [{ query: getBooks }],
     });
   };
+
   if (Mutation.loading) {
     return <Spin size="large" />;
   }
-  if (Mutation.data) {
-    toastDefault("Thêm sách thành công");
-    navigate("/admin/books");
-  }
+
   return (
     <div>
       <Form

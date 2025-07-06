@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { Button, Input, Spin, Table } from "antd";
+import { Button, Input, Spin, Table, Modal } from "antd";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import formatprice from "@/common/formatprice";
@@ -114,16 +114,23 @@ const Book: React.FC = () => {
   };
 
   const onRemove = () => {
-    if (window.confirm("Are you sure you want to remove")) {
-      selectedRowKeys.forEach((id) => {
-        add({
-          variables: { id },
-          refetchQueries: [{ query: getBooks }],
+    Modal.confirm({
+      title: 'Xác nhận xóa',
+      content: `Bạn có chắc chắn muốn xóa ${selectedRowKeys.length} sách đã chọn?`,
+      okText: 'Xóa',
+      okType: 'danger',
+      cancelText: 'Hủy',
+      onOk() {
+        selectedRowKeys.forEach((id) => {
+          add({
+            variables: { id },
+            refetchQueries: [{ query: getBooks }],
+          });
         });
-      });
-      setSelectedRowKeys([]);
-      toastDefault("Xóa sách thành công");
-    }
+        setSelectedRowKeys([]);
+        toastDefault("Xóa sách thành công");
+      },
+    });
   };
 
   const hasSelected = selectedRowKeys.length > 0;

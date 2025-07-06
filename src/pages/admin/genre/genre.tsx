@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Input, Spin, Table } from "antd";
+import { Button, Input, Spin, Table, Modal } from "antd";
 import { useMutation, useQuery } from "@apollo/client";
 import { getBooks, getGenres } from "@/graphql-client/query.tsx";
 import { deleteGenre } from "@/graphql-client/mutations.tsx";
@@ -62,20 +62,23 @@ const Genre: React.FC = () => {
   };
 
   const onRemove = () => {
-    if (
-      window.confirm(
-        "Khi xóa thể loại, các tác phẩm của thể loại cũng bị xóa, bạn có muốn tiếp tục ?",
-      )
-    ) {
-      selectedRowKeys.forEach((id) => {
-        add({
-          variables: { id },
-          refetchQueries: [{ query: getGenres }, { query: getBooks }],
+    Modal.confirm({
+      title: 'Xác nhận xóa thể loại',
+      content: 'Khi xóa thể loại, các tác phẩm của thể loại cũng bị xóa, bạn có muốn tiếp tục?',
+      okText: 'Xóa',
+      okType: 'danger',
+      cancelText: 'Hủy',
+      onOk() {
+        selectedRowKeys.forEach((id) => {
+          add({
+            variables: { id },
+            refetchQueries: [{ query: getGenres }, { query: getBooks }],
+          });
         });
-      });
-      setSelectedRowKeys([]);
-      toastDefault("Xóa thể loại thành công");
-    }
+        setSelectedRowKeys([]);
+        toastDefault("Xóa thể loại thành công");
+      },
+    });
   };
 
   const hasSelected = selectedRowKeys.length > 0;

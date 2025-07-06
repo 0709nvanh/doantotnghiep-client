@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
-import { Avatar, Button, Col, Input, Modal, Rate, Row } from "antd";
-import React, { useRef, useState } from "react";
+import { Avatar, Button, Col, Input, Modal, Rate, Row, Spin } from "antd";
+import React, { useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import formatprice from "@/common/formatprice";
 import { toastDefault } from "@/common/toast";
@@ -32,7 +32,7 @@ const HistoryItem = (props: Props) => {
   const [addOrder, MutaOrder] = useMutation<any>(createOrder);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isViewModal, setIsViewModal] = useState<String>("");
-  const refInput = useRef<any>("");
+  const refInput = useRef<any>(null);
   const user = useSelector((state: any) => state.auth.user);
   console.log(order);
   const [sao, setSao] = useState(0);
@@ -42,18 +42,50 @@ const HistoryItem = (props: Props) => {
     total += item.book.price * item.quantity;
   });
 
-  const handleRemoveOrder = (id: string) => {
-    if (window.confirm("Bạn có muốn hủy đơn hàng hay không ?")) {
-      dele({
-        variables: { id },
-        refetchQueries: [{ query: getOrders }],
-      });
+  const hasShownToast = useRef(false);
+  const hasShownRatingToast = useRef(false);
+
+  useEffect(() => {
+    if (MutaOrder.data?.createOrder && !hasShownToast.current) {
+      dispatch(addNotification(MutaOrder.data.createOrder));
+      hasShownToast.current = true;
     }
+  }, [MutaOrder.data, dispatch]);
+
+  useEffect(() => {
+    hasShownToast.current = false;
+    hasShownRatingToast.current = false;
+  }, []);
+
+  const handleRemoveOrder = (id: string) => {
+    Modal.confirm({
+      title: 'Xác nhận hủy đơn hàng',
+      content: 'Bạn có chắc chắn muốn hủy đơn hàng này?',
+      okText: 'Hủy đơn',
+      okType: 'danger',
+      cancelText: 'Không',
+      onOk() {
+        dele({
+          variables: { id },
+          refetchQueries: [{ query: getOrders }],
+        });
+      },
+    });
   };
+
   const handleUpdateOrder = (id: string, status: number) => {
-    add({
-      variables: { id, status },
-      refetchQueries: [{ query: getOrders }],
+    Modal.confirm({
+      title: 'Xác nhận cập nhật',
+      content: 'Bạn có chắc chắn muốn cập nhật đơn hàng này?',
+      okText: 'Cập nhật',
+      okType: 'primary',
+      cancelText: 'Hủy',
+      onOk() {
+        add({
+          variables: { id, status },
+          refetchQueries: [{ query: getOrders }],
+        });
+      },
     });
   };
 
@@ -220,6 +252,13 @@ const HistoryItem = (props: Props) => {
     if (isViewModal === mua_lai) {
       html = (
         <div>
+          <div className="thong-tin-kh">
+            <p className="m-0">Tên khách hàng: {order.name}</p>
+            <p className="m-0">Email: {order.email}</p>
+            <p className="m-0">Số điện thoại: 0{order.phone}</p>
+            <p className="m-0">Địa chỉ: {order.address}</p>
+            <p className="m-0">Trạng thái đơn hàng: Đang xử lý</p>
+          </div>
           {listOrder.length > 0 &&
             listOrder.map((item: any) => (
               <div key={item.id} className="history-product">
@@ -276,7 +315,7 @@ const HistoryItem = (props: Props) => {
       html = (
         <div>
           <h5>Thông tin liên hệ</h5>
-          <p>Tên cửa hàng: Cửa hàng sách SkyBooks</p>
+          <p>Tên cửa hàng: NHÀ SÁCH VÂN ANH</p>
           <p>Địa chỉ: Số 83 Lý Nam Đế, Phường Cửa Đông, Hoàn Kiếm, Hà Nội</p>
           <p>Số điện thoại: 024 3843 8220</p>
           <p>
@@ -321,6 +360,63 @@ const HistoryItem = (props: Props) => {
     } else if (isViewModal === danh_gia_shop) {
       html = (
         <div>
+          <div className="thong-tin-kh">
+            <p className="m-0">Tên khách hàng: {order.name}</p>
+            <p className="m-0">Email: {order.email}</p>
+            <p className="m-0">Số điện thoại: 0{order.phone}</p>
+            <p className="m-0">Địa chỉ: {order.address}</p>
+            <p className="m-0">Trạng thái đơn hàng: Đã giao hàng</p>
+          </div>
+          {listOrder.length > 0 &&
+            listOrder.map((item: any) => (
+              <div key={item.id} className="history-product">
+                <Row className="align-items-center">
+                  <Col className="me-3">
+                    <img height="60" width="60" src={item.book.image} alt="" />
+                  </Col>
+                  <Col span={16}>
+                    <p className="m-0" style={{ textAlign: "left" }}>
+                      Tên sách: {item.book.name}
+                    </p>
+                    <p className="m-0 my-2" style={{ textAlign: "left" }}>
+                      Tác giả: {item.book.author.name}
+                    </p>
+                    <p style={{ textAlign: "left" }} className="m-0">
+                      Giá tiền: {formatprice(item.book.price)}
+                    </p>
+                  </Col>
+                  <Col span={2}>
+                    <i className="fas fa-times"></i>
+                  </Col>
+                  <Col span={2}>
+                    <p
+                      className="m-0"
+                      style={{ fontSize: "20px", color: "coral" }}
+                    >
+                      {item.quantity}
+                    </p>
+                  </Col>
+                </Row>
+              </div>
+            ))}
+          <div className="history-total py-2">
+            <p
+              className="m-0"
+              style={{ fontSize: "20px", textAlign: "right", width: "100%" }}
+            >
+              <i
+                className="fas fa-money-check-alt"
+                style={{ color: "coral" }}
+              ></i>{" "}
+              Tổng số tiền:
+              <span
+                className="m-0 ms-1"
+                style={{ fontSize: "24px", color: "coral" }}
+              >
+                {formatprice(total)}
+              </span>
+            </p>
+          </div>
           <div className="d-flex align-items-center justify-content-between my-4">
             <Rate onChange={updateSao} />
           </div>
@@ -415,13 +511,16 @@ const HistoryItem = (props: Props) => {
         ],
       });
       setTimeout(() => {
-        toastDefault("Đặt hàng thành công");
+        if (!hasShownToast.current) {
+          toastDefault("Đặt hàng thành công");
+          hasShownToast.current = true;
+        }
       }, 1000);
     } else if (isViewModal === danh_gia_shop) {
       const danhgia = {
         id: order.id,
         danhgia: sao,
-        comments: refInput.current.input.value,
+        comments: refInput.current?.input?.value || "",
       };
       upSao({
         variables: danhgia,
@@ -430,19 +529,22 @@ const HistoryItem = (props: Props) => {
         ],
       });
       setTimeout(() => {
-        toastDefault("Đánh giá thành công");
+        if (!hasShownRatingToast.current) {
+          toastDefault("Đánh giá thành công");
+          hasShownRatingToast.current = true;
+        }
       }, 1000);
     }
     setIsModalVisible(false);
   };
 
-  if (MutaOrder.data?.createOrder) {
-    dispatch(addNotification(MutaOrder.data.createOrder));
-  }
-
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+
+  if (MutaOrder.loading) {
+    return <Spin size="large" />;
+  }
 
   return (
     <div className="container history-order-view">

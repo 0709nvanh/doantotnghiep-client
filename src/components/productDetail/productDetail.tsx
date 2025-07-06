@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { Button, Card, Form, Input, Spin } from "antd";
+import { Button, Card, Form, Input, Spin, Modal } from "antd";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y, Navigation, Pagination, Scrollbar } from "swiper/modules";
@@ -27,26 +27,21 @@ const { TextArea } = Input;
 interface Props { }
 
 const ProductDetail = (props: Props) => {
+  const { slug } = useParams();
   const navigate = useNavigate();
-  const { slugProduct } = useParams();
-  const [value1, setValue] = useState("");
   const dispatch = useDispatch();
+  const user = useSelector((state: any) => state.auth.user);
   const [count, setCount] = useState(1);
-
+  const [isCmt, setIsCmt] = useState(false);
+  const [value, setValue] = useState("");
+  const [imageFocus, setImageFocus] = useState<any>("");
   const [form] = Form.useForm();
 
-  const [isCmt, setIsCmt] = useState(false);
-  const [imageFocus, setImageFocus] = useState<any>("");
   const { loading, error, data } = useQuery(getSingleBook, {
     variables: {
-      slug: slugProduct,
+      slug: slug,
     },
   });
-
-  const user = useSelector((state: any) => state.auth.user);
-
-  const [add, Mutation] = useMutation<any>(addComments);
-  const [add1, Mutation2] = useMutation<any>(deleteComment);
 
   const { loading: loading1, error: error1, data: data1 } = useQuery(getBooks);
   const {
@@ -59,26 +54,8 @@ const ProductDetail = (props: Props) => {
     },
   });
 
-  if (loading || loading1) {
-    return <Spin size="large" />;
-  }
-  if (error || error1) {
-    return <p>error book ...</p>;
-  }
-  const handleChange = (e: any) => {
-    setCount(e.target.value);
-  };
-  const handleClickTang = () => {
-    setCount(Number(count) + 1);
-  };
-
-  const handleClickGiam = () => {
-    if (count > 1) {
-      setCount(Number(count) - 1);
-    } else {
-      setCount(1);
-    }
-  };
+  const [add] = useMutation<any>(addComments);
+  const [add1] = useMutation<any>(deleteComment);
 
   const bookTopQuery: any[] = [];
   if (data1?.books) {
@@ -100,6 +77,22 @@ const ProductDetail = (props: Props) => {
     );
   }
   console.log("dataBookQuery", dataBookQuery);
+
+  const handleChange = (e: any) => {
+    setCount(e.target.value);
+  };
+
+  const handleClickTang = () => {
+    setCount(Number(count) + 1);
+  };
+
+  const handleClickGiam = () => {
+    if (count > 1) {
+      setCount(Number(count) - 1);
+    } else {
+      setCount(1);
+    }
+  };
 
   const handleClickAdd = () => {
     const m = data.book.quantity;
@@ -130,17 +123,28 @@ const ProductDetail = (props: Props) => {
 
   const onRemove = (id: any, idUser: any) => {
     if (idUser !== user.id) {
-      alert("Bạn không thể xóa bình luận không phải của bạn");
+      Modal.warning({
+        title: 'Không có quyền',
+        content: 'Bạn không thể xóa bình luận không phải của bạn',
+        okText: 'Đóng',
+      });
     } else {
-      if (window.confirm("Bạn có chắc chắn muốn xóa bình luận này ?")) {
-        add1({
-          variables: { id },
-          refetchQueries: [
-            { query: getComments, variables: { bookId: data?.book?.id } },
-          ],
-        });
-        toastDefault("Xóa bình luận thành công");
-      }
+      Modal.confirm({
+        title: 'Xác nhận xóa',
+        content: 'Bạn có chắc chắn muốn xóa bình luận này?',
+        okText: 'Xóa',
+        okType: 'danger',
+        cancelText: 'Hủy',
+        onOk() {
+          add1({
+            variables: { id },
+            refetchQueries: [
+              { query: getComments, variables: { bookId: data?.book?.id } },
+            ],
+          });
+          toastDefault("Xóa bình luận thành công");
+        },
+      });
     }
   };
 
@@ -163,6 +167,13 @@ const ProductDetail = (props: Props) => {
     toastDefault("Bình luận thành công");
     form.resetFields();
   };
+
+  if (loading || loading1) {
+    return <Spin size="large" />;
+  }
+  if (error || error1) {
+    return <p>error book ...</p>;
+  }
 
   return (
     <div>
@@ -402,7 +413,7 @@ const ProductDetail = (props: Props) => {
                             },
                           ]}
                         >
-                          <TextArea defaultValue={value1} />
+                          <TextArea defaultValue={value} />
                         </Form.Item>
                         <Form.Item>
                           <Button type="primary" htmlType="submit">

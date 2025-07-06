@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { Button, Spin, Table } from "antd";
+import { Button, Spin, Table, Modal } from "antd";
 import React, { useState } from "react";
 import { toastDefault } from "@/common/toast";
 import { deleteComment } from "@/graphql-client/mutations.tsx";
@@ -40,9 +40,9 @@ const Book: React.FC = () => {
   if (data?.comment.length > 0) {
     for (const element of data.comment) {
       data1?.push({
-        name: element.user.name,
+        name: element.user?.name,
         content: element.content,
-        book: element.book.name,
+        book: element.book?.name,
         btn: (
           <Button onClick={() => onRemove(element.id)}>Xóa bình luận</Button>
         ),
@@ -51,18 +51,26 @@ const Book: React.FC = () => {
   }
 
   const onRemove = (id: any) => {
-    if (window.confirm("Are you sure you want to remove")) {
-      add({
-        variables: { id },
-        refetchQueries: [{ query: getAllComments }],
-      });
-      toastDefault("Xóa bình luận thành công");
-    }
+    Modal.confirm({
+      title: 'Xác nhận xóa',
+      content: 'Bạn có chắc chắn muốn xóa bình luận này?',
+      okText: 'Xóa',
+      okType: 'danger',
+      cancelText: 'Hủy',
+      onOk() {
+        add({
+          variables: { id },
+          refetchQueries: [{ query: getAllComments }],
+        });
+        toastDefault("Xóa bình luận thành công");
+      },
+    });
   };
 
   const handleTableChange = (pagination: any) => {
     setPage(pagination);
   };
+
   return (
     <Table
       onChange={handleTableChange}
@@ -72,4 +80,5 @@ const Book: React.FC = () => {
     />
   );
 };
+
 export default Book;

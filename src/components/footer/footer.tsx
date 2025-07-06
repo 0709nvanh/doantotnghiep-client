@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Col, Typography } from "antd";
 import "./footer.css";
-interface Props {}
+interface Props { }
 
 const Footer = (props: Props) => {
 	return (
@@ -20,7 +20,7 @@ const Footer = (props: Props) => {
 							</Col>
 							<Col span={21}>
 								<Typography.Title level={5} className="footer-text-h5">
-									Tên cửa hàng: Cửa hàng sách SkyBooks
+									Tên cửa hàng: NHÀ SÁCH VÂN ANH
 								</Typography.Title>
 								<Typography.Title level={5} className="footer-text-h5">
 									Địa chỉ: Số 83 Lý Nam Đế, Phường Cửa Đông, Hoàn Kiếm, Hà Nội
@@ -30,7 +30,7 @@ const Footer = (props: Props) => {
 					</Col>
 					<Col span={12}>
 						<Typography.Title level={3} className="text-footer-h3">
-							LIÊN HỆ VỚI SKYBOOKS
+							LIÊN HỆ VỚI NHÀ SÁCH VÂN ANH
 						</Typography.Title>
 						<div className="footer-list-icon">
 							<a target="_blank" href="https://www.facebook.com/Skybooks.vn">
@@ -38,14 +38,14 @@ const Footer = (props: Props) => {
 									<i className="fab fa-facebook-f"></i>
 								</div>
 							</a>
-                            <a target="_blank" href="https://we-love-skybooks.tumblr.com">
+							<a target="_blank" href="https://we-love-skybooks.tumblr.com">
 								<div className="footer-list-icon-hover">
-                                <i className="fab fa-telegram-plane"></i>
+									<i className="fab fa-telegram-plane"></i>
 								</div>
 							</a>
-                            <a target="_blank" href="https://www.instagram.com/skybooks/">
+							<a target="_blank" href="https://www.instagram.com/skybooks/">
 								<div className="footer-list-icon-hover">
-                                <i className="fab fa-instagram"></i>
+									<i className="fab fa-instagram"></i>
 								</div>
 							</a>
 
@@ -63,7 +63,7 @@ const Footer = (props: Props) => {
 							LIÊN HỆ VỚI CHÚNG TÔI
 						</Typography.Title>
 						<ul className="footer-content-list">
-							<li>Tên cửa hàng: Cửa hàng sách SkyBooks</li>
+							<li>Tên cửa hàng NHÀ SÁCH VÂN ANH</li>
 							<li>
 								Địa chỉ: Số 83 Lý Nam Đế, Phường Cửa Đông, Hoàn Kiếm, Hà Nội
 							</li>

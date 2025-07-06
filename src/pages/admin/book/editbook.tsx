@@ -7,7 +7,7 @@ import {
   uploadBytes,
   uploadBytesResumable,
 } from "firebase/storage";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "@/common/firebase/index";
 import { toastDefault } from "@/common/toast.tsx";
@@ -28,6 +28,12 @@ import { SelectFormItem } from "@/components/atoms/select-form-item";
 const Editbook: React.FC = () => {
   const { slug } = useParams();
   const [form] = Form.useForm();
+  const navigate = useNavigate();
+  const [update, Mutation] = useMutation<any>(updateSingleBook);
+  const [imageFile, setImageFile] = useState<any>([]);
+  const [imageDefault, setImageDefault] = useState<any>([]);
+  const hasShownToast = useRef(false);
+
   const {
     loading: loading1,
     error: error1,
@@ -37,6 +43,20 @@ const Editbook: React.FC = () => {
       slug: slug,
     },
   });
+
+  // Xử lý sửa sách thành công
+  useEffect(() => {
+    if (Mutation.data && !hasShownToast.current) {
+      toastDefault("Sửa sách thành công");
+      hasShownToast.current = true;
+      navigate("/admin/books");
+    }
+  }, [Mutation.data, navigate]);
+
+  // Reset toast flag khi component mount
+  useEffect(() => {
+    hasShownToast.current = false;
+  }, []);
 
   useEffect(() => {
     if (!data1) return;
@@ -50,16 +70,13 @@ const Editbook: React.FC = () => {
     setImageDefault(imageJson);
   }, [form, data1]);
 
-  const navigate = useNavigate();
-  const [update, Mutation] = useMutation<any>(updateSingleBook);
-  const [imageFile, setImageFile] = useState<any>([]);
-  const [imageDefault, setImageDefault] = useState<any>([]);
-
   const uploadImageState = useCallback((image: File) => {
     setImageFile(image);
   }, []);
+
   const { loading, error, data } = useQuery(getAuthors);
   const { loading: loading2, error: error2, data: data2 } = useQuery(getGenres);
+
   if (loading || loading1 || loading2) {
     return <Spin size="large" />;
   }
@@ -108,10 +125,7 @@ const Editbook: React.FC = () => {
   if (Mutation.loading) {
     return <Spin size="large" />;
   }
-  if (Mutation.data) {
-    toastDefault("Sửa sách thành công");
-    navigate("/admin/books");
-  }
+
   return (
     <div>
       <Form

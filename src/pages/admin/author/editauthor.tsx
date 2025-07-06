@@ -1,10 +1,9 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { Button, Form, Input, Spin } from "antd";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toastDefault } from "@/common/toast.tsx";
 import { updateSingleAuthor } from "@/graphql-client/mutations.tsx";
-
 import { getAuthors, getSingleAuthor } from "@/graphql-client/query.tsx";
 import "./form.css";
 
@@ -17,11 +16,25 @@ const Editauthor: React.FC = () => {
     },
   });
   const [add, Mutation] = useMutation<any>(updateSingleAuthor);
+  const hasShownToast = useRef(false);
+
+  // Xử lý sửa tác giả thành công
+  useEffect(() => {
+    if (Mutation.data && !hasShownToast.current) {
+      toastDefault("Sửa tác giả thành công");
+      hasShownToast.current = true;
+      navigate("/admin/authors");
+    }
+  }, [Mutation.data, navigate]);
+
+  // Reset toast flag khi component mount
+  useEffect(() => {
+    hasShownToast.current = false;
+  }, []);
 
   const onFinish = (values: any) => {
     values.phone = Number(values.phone);
     values.id = data.author.id;
-    console.log(values);
     add({
       variables: values,
       refetchQueries: [{ query: getAuthors }],
@@ -30,10 +43,6 @@ const Editauthor: React.FC = () => {
 
   if (Mutation.loading) {
     return <Spin size="large" />;
-  }
-  if (Mutation.data) {
-    toastDefault("Sửa tác giả thành công");
-    navigate("/admin/authors");
   }
 
   if (loading) {

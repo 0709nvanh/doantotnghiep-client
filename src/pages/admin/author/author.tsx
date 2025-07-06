@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Button, Input, Spin, Table } from "antd";
+import { Button, Input, Spin, Table, Modal } from "antd";
 import { useMutation, useQuery } from "@apollo/client";
 import { getAuthors, getBooks } from "@/graphql-client/query.tsx";
 import { deleteAuthor } from "@/graphql-client/mutations.tsx";
@@ -61,21 +61,24 @@ const Author: React.FC = () => {
   };
 
   const onRemove = () => {
-    if (
-      window.confirm(
-        "Khi xóa tác giả, các tác phẩm của tác giả cũng bị xóa, bạn có muốn tiếp tục ?",
-      )
-    ) {
-      console.log("id", selectedRowKeys);
-      selectedRowKeys.forEach((id) => {
-        add({
-          variables: { id },
-          refetchQueries: [{ query: getAuthors }, { query: getBooks }],
+    Modal.confirm({
+      title: 'Xác nhận xóa tác giả',
+      content: 'Khi xóa tác giả, các tác phẩm của tác giả cũng bị xóa, bạn có muốn tiếp tục?',
+      okText: 'Xóa',
+      okType: 'danger',
+      cancelText: 'Hủy',
+      onOk() {
+        console.log("id", selectedRowKeys);
+        selectedRowKeys.forEach((id) => {
+          add({
+            variables: { id },
+            refetchQueries: [{ query: getAuthors }, { query: getBooks }],
+          });
         });
-      });
-      setSelectedRowKeys([]);
-      toastDefault("Xóa tác giả thành công");
-    }
+        setSelectedRowKeys([]);
+        toastDefault("Xóa tác giả thành công");
+      },
+    });
   };
 
   const hasSelected = selectedRowKeys.length > 0;
