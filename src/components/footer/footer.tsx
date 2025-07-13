@@ -14,9 +14,9 @@ const Footer = (props: Props) => {
 						</Typography.Title>
 						<Row>
 							<Col span={3}>
-								<div className="footer-icon-hover">
+								{/* <div className="footer-icon-hover">
 									<i className="fab fa-twitter"></i>
-								</div>
+								</div> */}
 							</Col>
 							<Col span={21}>
 								<Typography.Title level={5} className="footer-text-h5">
@@ -33,7 +33,7 @@ const Footer = (props: Props) => {
 							LIÊN HỆ VỚI NHÀ SÁCH VÂN ANH
 						</Typography.Title>
 						<div className="footer-list-icon">
-							<a target="_blank" href="https://www.facebook.com/Skybooks.vn">
+							{/* <a target="_blank" href="https://www.facebook.com/Skybooks.vn">
 								<div className="footer-list-icon-hover">
 									<i className="fab fa-facebook-f"></i>
 								</div>
@@ -47,7 +47,7 @@ const Footer = (props: Props) => {
 								<div className="footer-list-icon-hover">
 									<i className="fab fa-instagram"></i>
 								</div>
-							</a>
+							</a> */}
 
 						</div>
 					</Col>

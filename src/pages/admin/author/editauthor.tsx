@@ -81,7 +81,7 @@ const Editauthor: React.FC = () => {
         </Form.Item>
         <Form.Item>
           <Button loading={Mutation.loading} type="primary" htmlType="submit">
-            Submit
+            Lưu thông tin
           </Button>
         </Form.Item>
       </Form>

@@ -27,7 +27,8 @@ const { TextArea } = Input;
 interface Props { }
 
 const ProductDetail = (props: Props) => {
-  const { slug } = useParams();
+  const { slugProduct: slug } = useParams();
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.auth.user);
@@ -64,8 +65,8 @@ const ProductDetail = (props: Props) => {
     }
   }
   let images = [];
-  if (data.book) {
-    images = JSON.parse(data.book.image);
+  if (data?.book) {
+    images = JSON.parse(data?.book?.image);
   }
   const addImageFocus = (image: String) => {
     setImageFocus(image);
@@ -76,7 +77,6 @@ const ProductDetail = (props: Props) => {
       (book: any) => book.id !== data.book.id,
     );
   }
-  console.log("dataBookQuery", dataBookQuery);
 
   const handleChange = (e: any) => {
     setCount(e.target.value);
@@ -95,6 +95,12 @@ const ProductDetail = (props: Props) => {
   };
 
   const handleClickAdd = () => {
+    if (!user?.id) {
+      toastError("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
+      navigate("/login");
+      return;
+    }
+
     const m = data.book.quantity;
 
     if (count > m) {
@@ -115,7 +121,8 @@ const ProductDetail = (props: Props) => {
           image: JSON.parse(data.book.image)[0],
         },
       };
-      dispatch(addToCart(cart));
+      
+      dispatch(addToCart({ cart, userId: user.id }));
       setCount(1);
       toastDefault("Thêm sách vào giỏ hàng thành công");
     }
@@ -267,49 +274,26 @@ const ProductDetail = (props: Props) => {
                   </div>
                   <div className="button-addtocard">
                     <Button onClick={handleClickAdd} className="btn">
-                      ADD TO CARD
+                      Thêm giỏ hàng
                     </Button>
                   </div>
                 </div>
-                <div
-                  className="
-                                        d-flex
-                                        justify-content-start
-                                        mt-3
-                                        product-relate
-                                        border-bottom
-                                        pb-3
-                                    "
-                >
-                  <div className="Wistlist pe-4">
-                    <p>
-                      <i className="far fa-heart pe-2" />
-                      Wistlist
-                    </p>
-                  </div>
-                  <div className="Compare">
-                    <p>
-                      <i className="fas fa-list-ul pe-2" />
-                      Compare
-                    </p>
-                  </div>
-                </div>
+                
                 <div className="product-description-content mt-3 d-flex">
                   <div>
-                    <span>Thể loại: {data.book?.genre?.name}</span>
+                    <span>Thể loại: <span className="fw-bold">{data.book?.genre?.name}</span></span>
                   </div>
-                  <div className="mx-4">
-                    <span>
-                      Tác giả: <p>{data?.book?.author?.name}</p>
-                    </span>
-                  </div>
+                  
                   <div className="tag">
-                    <span>
+                    {/* <span>
                       Tags: <p>Tag 0-1</p>
-                    </span>
+                    </span> */}
                   </div>
                 </div>
-                <div className="icon mt-2">
+                <div className="d-flex">
+                  <p>Tác giả: <span className="fw-bold">{data?.book?.author?.name}</span></p>
+                </div>
+                {/* <div className="icon mt-2">
                   <div className="d-flex justify-content-start">
                     <div className="facebook pe-2">
                       <p>
@@ -327,7 +311,7 @@ const ProductDetail = (props: Props) => {
                       </p>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
               <Button
                 onClick={() => setIsCmt(!isCmt)}
@@ -431,7 +415,7 @@ const ProductDetail = (props: Props) => {
                 <div className="d-flex justify-content-evenly border-top pt-4">
                   <div className="description">
                     <p className="border-bottom border-4 border-warning">
-                      DESCRIPTION
+                      Mô tả ngắn về sách
                     </p>
                   </div>
                 </div>

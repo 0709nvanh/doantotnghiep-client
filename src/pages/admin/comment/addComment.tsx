@@ -5,30 +5,35 @@ import { toastDefault } from "@/common/toast";
 import { deleteComment } from "@/graphql-client/mutations.tsx";
 import { getAllComments } from "@/graphql-client/query.tsx";
 
-const columns = [
-  {
-    title: "Người bình luận",
-    dataIndex: "name",
-  },
-  {
-    title: "Nội dung",
-    dataIndex: "content",
-  },
-  {
-    title: "Sách",
-    dataIndex: "book",
-  },
-  {
-    title: "",
-    dataIndex: "btn",
-  },
-];
+
 
 const Book: React.FC = () => {
   const { loading, error, data } = useQuery(getAllComments);
   const [add] = useMutation<any>(deleteComment);
-  const [page, setPage] = useState({ current: 1, pageSize: 3 });
-
+  const [page, setPage] = useState({ current: 1, pageSize: 10 });
+  const columns = [
+    {
+      title: "STT",
+      dataIndex: "index",
+      render: (text: any, record: any, index: number) => index + 1,
+    },
+    {
+      title: "Người bình luận",
+      dataIndex: "name",
+    },
+    {
+      title: "Nội dung",
+      dataIndex: "content",
+    },
+    {
+      title: "Sách",
+      dataIndex: "book",
+    },
+    {
+      title: "",
+      dataIndex: "btn",
+    },
+  ];
   if (loading) {
     return <Spin size="large" />;
   }

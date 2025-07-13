@@ -3,12 +3,14 @@ import { useMutation } from "@apollo/client";
 import { Button, Form, Input, Spin, Table, Modal } from "antd";
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import formatprice from "@/common/formatprice";
 import { toastDefault } from "@/common/toast";
 import {
   decreaseCart,
   increaseCart,
   removeCart,
+  loadUserCart,
 } from "@/features/cart/cartSlide";
 import { addNotification } from "@/features/notifications/notificationSlide";
 import { createOrder } from "@/graphql-client/mutations";
@@ -48,6 +50,7 @@ const columns = [
 ];
 
 const Cart = () => {
+  const navigate = useNavigate();
   const [form] = Form.useForm();
   const user = useSelector((state: any) => state.auth.user);
   const [selectedRowKeys, setSelectedRowKeys] = useState<Array<string>>([]);
@@ -57,17 +60,28 @@ const Cart = () => {
   const [add, Mutation] = useMutation<any>(createOrder);
   const hasShownToast = useRef(false);
 
+  // Check if user is logged in
   useEffect(() => {
-    if (!user) return;
+    if (!user?.id) {
+      toastError("Vui lòng đăng nhập để xem giỏ hàng");
+      navigate("/login");
+      return;
+    }
+    // Load user's cart when component mounts
+    dispatch(loadUserCart(user.id));
+  }, [user?.id, dispatch, navigate]);
+
+  useEffect(() => {
+    if (!user?.id) return;
     form.setFieldsValue(user);
   }, [form, user]);
 
   useEffect(() => {
     if (Mutation.data?.createOrder && !hasShownToast.current) {
-      dispatch(addNotification(Mutation.data?.createOrder));
+      dispatch(addNotification({ order: Mutation.data?.createOrder, userId: user?.id }));
       hasShownToast.current = true;
     }
-  }, [Mutation.data, dispatch]);
+  }, [Mutation.data, dispatch, user?.id]);
 
   useEffect(() => {
     hasShownToast.current = false;
@@ -83,6 +97,21 @@ const Cart = () => {
     return <Spin size="large" />;
   }
 
+  // Show login requirement if not logged in
+  if (!user?.id) {
+    return (
+      <div className="giohang">
+        <h3 className="my-4">Giỏ hàng</h3>
+        <div className="text-center my-5">
+          <h4>Vui lòng đăng nhập để xem giỏ hàng</h4>
+          <Button type="primary" onClick={() => navigate("/login")}>
+            Đăng nhập
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   const data: any[] | undefined = [];
   for (const element of carts) {
     data.push({
@@ -96,7 +125,7 @@ const Cart = () => {
           <Button
             danger
             type="primary"
-            onClick={() => dispatch(decreaseCart(element.book.id))}
+            onClick={() => dispatch(decreaseCart({ bookId: element.book.id, userId: user.id }))}
             loading={false}
           >
             -
@@ -104,7 +133,7 @@ const Cart = () => {
           <span className="m-0 mx-2">{element.quantity}</span>
           <Button
             type="primary"
-            onClick={() => dispatch(increaseCart(element.book.id))}
+            onClick={() => dispatch(increaseCart({ bookId: element.book.id, userId: user.id }))}
             loading={false}
           >
             +
@@ -114,7 +143,7 @@ const Cart = () => {
       totalBook: formatprice(element.quantity * element.book.price),
       delete: (
         <Button type="primary" onClick={() => remove(element.book.id)} danger>
-          <DeleteOutlined />
+          <DeleteOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
         </Button>
       ),
     });
@@ -140,7 +169,7 @@ const Cart = () => {
       okType: 'danger',
       cancelText: 'Hủy',
       onOk() {
-        dispatch(removeCart(id));
+        dispatch(removeCart({ bookId: id, userId: user.id }));
         toastDefault("Xóa thành công");
       },
     });
@@ -164,7 +193,7 @@ const Cart = () => {
         status: 1,
       };
       selectedRowKeys.forEach((cart: any) => {
-        dispatch(removeCart(cart.book.id));
+        dispatch(removeCart({ bookId: cart.book.id, userId: user.id }));
       });
       setTotal(0);
       add({
@@ -186,80 +215,91 @@ const Cart = () => {
   return (
     <div className="giohang">
       <h3 className="my-4">Giỏ hàng</h3>
-      <div style={{ marginBottom: 16 }}>
-        <Button
-          type="primary"
-          onClick={start}
-          disabled={!hasSelected}
-          loading={false}
-        >
-          Bỏ chọn
-        </Button>
-
-        <span style={{ marginLeft: 8 }}>
-          {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
-        </span>
-      </div>
-      <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
-      <div className="muahang d-flex align-items-center justify-content-between my-3">
-        <div className="cart-total">
-          Tổng tiền:{" "}
-          <span style={{ fontWeight: "bold", color: "red" }}>
-            {formatprice(total)}
-          </span>
-        </div>
-      </div>
-      <Form
-        form={form}
-        name="basic"
-        className="mx-5"
-        labelCol={{ span: 8 }}
-        wrapperCol={{ span: 16 }}
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        autoComplete="off"
-      >
-        <Form.Item
-          label="Username"
-          name="name"
-          rules={[{ required: true, message: "Please input your username!" }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Email"
-          name="email"
-          rules={[{ required: true, message: "Please input your email!" }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Address"
-          name="address"
-          rules={[{ required: true, message: "Please input your address!" }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Phone"
-          name="phone"
-          rules={[{ required: true, message: "Please input your phone!" }]}
-        >
-          <Input type="phone" />
-        </Form.Item>
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button
-            htmlType="submit"
-            danger
-            style={{ marginLeft: 20 }}
-            type="primary"
-            disabled={!hasSelected}
-            loading={false}
-          >
-            Đặt hàng
+      {carts.length === 0 ? (
+        <div className="text-center my-5">
+          <h4>Giỏ hàng trống</h4>
+          <Button type="primary" onClick={() => navigate("/shop")}>
+            Tiếp tục mua sắm
           </Button>
-        </Form.Item>
-      </Form>
+        </div>
+      ) : (
+        <>
+          <div style={{ marginBottom: 16, marginTop: 16 }}>
+            <Button
+              type="primary"
+              onClick={start}
+              disabled={!hasSelected}
+              loading={false}
+            >
+              Bỏ chọn
+            </Button>
+
+            <span style={{ marginLeft: 8 }}>
+              {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
+            </span>
+          </div>
+          <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+          <div className="muahang d-flex align-items-center justify-content-between my-3">
+            <div className="cart-total">
+              Tổng tiền:{" "}
+              <span style={{ fontWeight: "bold", color: "red" }}>
+                {formatprice(total)}
+              </span>
+            </div>
+          </div>
+          <Form
+            form={form}
+            name="basic"
+            className="mx-5"
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+            initialValues={{ remember: true }}
+            onFinish={onFinish}
+            autoComplete="off"
+          >
+            <Form.Item
+              label="Username"
+              name="name"
+              rules={[{ required: true, message: "Please input your username!" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[{ required: true, message: "Please input your email!" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Address"
+              name="address"
+              rules={[{ required: true, message: "Please input your address!" }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Phone"
+              name="phone"
+              rules={[{ required: true, message: "Please input your phone!" }]}
+            >
+              <Input type="phone" />
+            </Form.Item>
+            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+              <Button
+                htmlType="submit"
+                danger
+                style={{ marginLeft: 20 }}
+                type="primary"
+                disabled={!hasSelected}
+                loading={false}
+              >
+                Đặt hàng
+              </Button>
+            </Form.Item>
+          </Form>
+        </>
+      )}
     </div>
   );
 };

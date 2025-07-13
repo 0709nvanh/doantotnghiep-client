@@ -10,47 +10,12 @@ import "./form.css";
 
 const { Search } = Input;
 
-const columns = [
-  {
-    title: "Tên sách",
-    dataIndex: "name",
-  },
-  {
-    title: "Thể loại truyện",
-    dataIndex: "genre",
-  },
-  {
-    title: "Giá tiền",
-    dataIndex: "price",
-  },
-  {
-    title: "Ảnh",
-    dataIndex: "image",
-  },
-  {
-    title: "Mô tả",
-    dataIndex: "des",
-  },
-  {
-    title: "Số lượng",
-    dataIndex: "quantity",
-  },
-  {
-    title: "Tên tác giả",
-    dataIndex: "author",
-  },
-  {
-    title: "Action",
-    dataIndex: "btnEdit",
-  },
-];
-
 const Book: React.FC = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<Array<string>>([]);
   const [keySearch, setKeySearch] = useState<string>("");
   const { loading, error, data } = useQuery(getBooks);
   const [add, Mutation] = useMutation<any>(deleteBook);
-  const [page, setPage] = useState({ current: 1, pageSize: 3 });
+  const [page, setPage] = useState({ current: 1, pageSize: 5 });
   const inputSearchRef = React.useRef<any>("");
   if (Mutation.loading) {
     return <Spin size="large" />;
@@ -61,11 +26,56 @@ const Book: React.FC = () => {
   if (error) {
     return <p>error book ...</p>;
   }
-  const start = () => {
-    setTimeout(() => {
-      setSelectedRowKeys([]);
-    }, 1000);
-  };
+  const columns = [
+    {
+      title: "STT",
+      dataIndex: "index",
+      render: (text: any, record: any, index: number) => {
+        // Calculate index based on current page
+        return (page.current - 1) * page.pageSize + index + 1;
+      },
+    },
+    {
+      title: "Tên sách",
+      dataIndex: "name",
+      width: 200,
+    },
+    {
+      title: "Thể loại truyện",
+      dataIndex: "genre",
+      width: 200,
+    },
+    {
+      title: "Giá tiền",
+      dataIndex: "price",
+      width: 200,
+    },
+    {
+      title: "Ảnh",
+      dataIndex: "image",
+      width: 200,
+    },
+    {
+      title: "Mô tả",
+      dataIndex: "des",
+      width: 400,
+    },
+    {
+      title: "Số lượng",
+      dataIndex: "quantity",
+      width: 200,
+    },
+    {
+      title: "Tên tác giả",
+      dataIndex: "author",
+      width: 200,
+    },
+    {
+      title: "Action",
+      dataIndex: "btnEdit",
+      width: 200,
+    },
+  ];
   const data1: any[] | undefined = [];
   if (data?.books.length > 0) {
     for (let i = 0; i < data.books.length; i++) {
@@ -152,31 +162,9 @@ const Book: React.FC = () => {
         onChange={handleChageSearch}
         ref={inputSearchRef}
       />
-      <div style={{ marginBottom: 16, padding: 20 }}>
-        <Button
-          type="primary"
-          onClick={start}
-          disabled={!hasSelected}
-          loading={false}
-        >
-          Bỏ chọn
-        </Button>
-        <Button
-          danger
-          style={{ marginLeft: 20 }}
-          type="primary"
-          onClick={onRemove}
-          disabled={!hasSelected}
-          loading={false}
-        >
-          Xóa
-        </Button>
-        <span style={{ marginLeft: 8 }}>
-          {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
-        </span>
-      </div>
       <Table
-        rowSelection={rowSelection}
+        className="mt-4"
+        bordered
         onChange={handleTableChange}
         pagination={page}
         columns={columns}

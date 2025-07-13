@@ -1,4 +1,5 @@
 import { LoadingOutlined } from "@ant-design/icons";
+import { useMutation } from "@apollo/client";
 import { Avatar, Button, Col, Form, Input, Row, Upload } from "antd";
 import {
 	getDownloadURL,
@@ -7,26 +8,41 @@ import {
 	uploadBytes,
 	uploadBytesResumable,
 } from "firebase/storage";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateAvatar } from "../../../features/auths/authSlice";
-import { useMutation } from "@apollo/client";
-import { addSingleAuthor } from "../../../graphql-client/mutations";
-import { getAuthors } from "../../../graphql-client/query";
+import { updateAvatar, updateUser } from "../../../features/auths/authSlice";
+import { updateUser as updateUserMutation } from "../../../graphql-client/mutations";
+import { getUserQuery } from "../../../graphql-client/query";
+import { toastDefault } from "../../../common/toast";
 
 interface Props {}
 
 const Profile = (props: Props) => {
 	const [form] = Form.useForm();
 	const [loading, setLoading] = useState(false);
-	const [add, Mutation] = useMutation<any>(addSingleAuthor);
+	const [updateUserMutationHook, { loading: updateLoading }] = useMutation<any>(updateUserMutation);
 	const dispatch = useDispatch();
 	const user = useSelector((state: any) => state.auth.user);
+	
 	const onFinish = (values: any) => {
-		add({
-			variables: { ...user, ...values },
+		updateUserMutationHook({
+			variables: { 
+				id: user.id,
+				name: values.name,
+				phone: values.phone,
+				avatar: user.avatar
+			},
+			refetchQueries: [{ query: getUserQuery, variables: { email: user.email } }],
+		}).then((result: any) => {
+			if (result.data?.updateUser) {
+				dispatch(updateUser(result.data.updateUser));
+				toastDefault("Cập nhật thông tin thành công");
+			}
+		}).catch((error: any) => {
+			console.error("Update failed:", error);
 		});
 	};
+	
 	useEffect(() => {
 		if (!user) return;
 		form.setFieldsValue(user);
@@ -51,7 +67,7 @@ const Profile = (props: Props) => {
 	};
 	const uploadButton = (
 		<div>
-			{loading ? <LoadingOutlined /> : <Avatar size={100} src={user.avatar} />}
+			{loading ? <LoadingOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} /> : <Avatar size={100} src={user.avatar} />}
 		</div>
 	);
 	return (
@@ -88,10 +104,10 @@ const Profile = (props: Props) => {
 							<Input disabled={true} />
 						</Form.Item>
 						<Form.Item label="Số điện thoại" name="phone">
-							<Input type="number" />
+							<Input />
 						</Form.Item>
 						<Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-							<Button type="primary" htmlType="submit">
+							<Button type="primary" htmlType="submit" loading={updateLoading}>
 								Lưu
 							</Button>
 						</Form.Item>

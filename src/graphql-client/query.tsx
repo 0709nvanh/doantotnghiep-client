@@ -106,6 +106,7 @@ const getUserQuery = gql`
             id
             name
             email
+            phone
             role
         }
     }

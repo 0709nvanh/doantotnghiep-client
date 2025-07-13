@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { getAuthors, getBooks, getGenres } from "../../graphql-client/query";
-import { Button, Col, Empty, List, Pagination, Spin } from "antd";
+import { Button, Col, Empty, List, Pagination, Spin, Card } from "antd";
 import { Link } from "react-router-dom";
+import formatprice from "../../common/formatprice";
 
 const Category = () => {
   const [page1, setPage1] = useState(1);
   const [page2, setPage2] = useState(1);
+  const [activeAuthorFilter, setActiveAuthorFilter] = useState<string | null>(null);
+  const [activeGenreFilter, setActiveGenreFilter] = useState<string | null>(null);
+  
   const {
     loading: loading1,
     error: error1,
@@ -58,17 +62,35 @@ const Category = () => {
   }
 
   const addGenreFilter = (idGenre: any) => {
-    setDataFilter(
-      data3?.books.filter(
-        (item: any) => item.genre && item.genre.id === idGenre,
-      ),
-    );
+    if (activeGenreFilter === idGenre) {
+      // Nếu click lại vào button đang active thì bỏ filter
+      setActiveGenreFilter(null);
+      setDataFilter(data3?.books);
+    } else {
+      // Nếu click vào button mới thì áp dụng filter
+      setActiveGenreFilter(idGenre);
+      setActiveAuthorFilter(null); // Bỏ active author filter
+      setDataFilter(
+        data3?.books.filter(
+          (item: any) => item.genre && item.genre.id === idGenre,
+        ),
+      );
+    }
   };
 
   const addAuthorFilter = (idAuthor: any) => {
-    setDataFilter(
-      data3?.books.filter((item: any) => item?.author?.id === idAuthor),
-    );
+    if (activeAuthorFilter === idAuthor) {
+      // Nếu click lại vào button đang active thì bỏ filter
+      setActiveAuthorFilter(null);
+      setDataFilter(data3?.books);
+    } else {
+      // Nếu click vào button mới thì áp dụng filter
+      setActiveAuthorFilter(idAuthor);
+      setActiveGenreFilter(null); // Bỏ active genre filter
+      setDataFilter(
+        data3?.books.filter((item: any) => item?.author?.id === idAuthor),
+      );
+    }
   };
 
   return (
@@ -83,8 +105,10 @@ const Category = () => {
             renderItem={(author: any) => (
               <List.Item>
                 <Button
+                  type={activeAuthorFilter === author.id ? "primary" : "default"}
                   style={{
-                    backgroundColor: "#f2f2f2",
+                    backgroundColor: activeAuthorFilter === author.id ? "#1890ff" : "#f2f2f2",
+                    color: activeAuthorFilter === author.id ? "white" : "black",
                     width: 250,
                     height: 50,
                     borderRadius: 10,
@@ -121,8 +145,10 @@ const Category = () => {
             renderItem={(genres: any) => (
               <List.Item>
                 <Button
+                  type={activeGenreFilter === genres.id ? "primary" : "default"}
                   style={{
-                    backgroundColor: "#f2f2f2",
+                    backgroundColor: activeGenreFilter === genres.id ? "#1890ff" : "#f2f2f2",
+                    color: activeGenreFilter === genres.id ? "white" : "black",
                     width: 250,
                     height: 50,
                     borderRadius: 10,
@@ -150,68 +176,88 @@ const Category = () => {
               total={dataFilter2.length}
             />
           </div>
-
-          <div className="categories-title mt-5">
-            <h3 style={{ textAlign: "left" }}>Sách</h3>
-          </div>
         </Col>
-        <div style={{ height: 1000, overflow: "auto", width: 2500 }}>
+        <div style={{ height: 1000, overflow: "auto", width: 2500, paddingLeft: 20, paddingRight: 20 }}>
           {dataFilter?.length > 0 ? (
             dataFilter?.map((book: any) => {
               if (book?.id) {
                 return (
-                  <Col
-                    key={book.id}
-                    span={32}
-                    style={{ boxSizing: "border-box" }}
+                  <Card 
+                    key={book.id} 
+                    hoverable 
+                    className="row col-12 mt-3 align-items-center d-flex"
+                    style={{ marginBottom: '20px' }}
                   >
-                    <Link
-                      to={"/" + book?.author?.slug + "/" + book?.slug}
-                      className="mx-2"
-                    >
-                      <div className="row">
-                        <div className="col-4">
-                          <img
-                            src={JSON.parse(book.image)[0]}
-                            alt=""
-                            width="200px"
-                            height="300px"
-                            style={{ objectFit: "cover" }}
-                          />
+                    <div className="row">
+                      <div className="col-4">
+                        <img
+                          src={JSON.parse(book.image)[0]}
+                          alt=""
+                          width="200px"
+                          height="300px"
+                          style={{ objectFit: "cover" }}
+                        />
+                      </div>
+                      <div className="col-8">
+                        <div className="mt-5">
+                          <h5 style={{ display: "block", textAlign: "left" }}>
+                            {book.name}
+                          </h5>
                         </div>
-                        <div className="col-8">
-                          <div className="mt-5">
-                            <h5 style={{ display: "block", textAlign: "left" }}>
-                              {book.name}
-                            </h5>
-                          </div>
-                          <div className="description-detail mt-3">
-                            <span
-                              style={{ display: "block", textAlign: "left" }}
-                            >
-                              {book.des}
-                            </span>
+                        <div className="d-flex align-items-center">
+                          <div id="rating" className="d-flex">
+                            <i style={{ display: 'block', textAlign: 'left' }} className="fa fa-star active" />
+                            <i style={{ display: 'block', textAlign: 'left' }} className="fa fa-star active" />
+                            <i style={{ display: 'block', textAlign: 'left' }} className="fa fa-star active" />
+                            <i style={{ display: 'block', textAlign: 'left' }} className="fa fa-star active" />
+                            <i style={{ display: 'block', textAlign: 'left' }} className="fa fa-star active" />
                           </div>
                         </div>
-                        <div className="d-flex">
-                          <div
-                            className="pe-3"
-                            style={{ padding: 10, marginLeft: 80 }}
-                          ></div>
+                        <div className="price-detail mt-3">
+                          <span style={{ display: 'block', textAlign: 'left', fontSize: '20px' }} className="fw-bold">
+                            {formatprice(book.price)}
+                          </span>
+                        </div>
+                        <div className="description-detail mt-3">
+                          <span style={{ display: "block", textAlign: "left" }}>
+                            {book.des}
+                          </span>
+                        </div>
+                        {/* Thêm tác giả */}
+                        <div className="author-detail mt-3">
+                          <span style={{ display: 'block', textAlign: 'left', fontSize: '16px' }}>
+                            <strong>Tác giả:</strong> {book.author?.name}
+                          </span>
+                        </div>
+                        {/* Thêm thể loại */}
+                        <div className="genre-detail mt-2">
+                          <span style={{ display: 'block', textAlign: 'left', fontSize: '16px' }}>
+                            <strong>Thể loại:</strong> {book.genre?.name}
+                          </span>
+                        </div>
+                        <div className="addtocard-detail mt-4 pb-2">
+                          <Link to={"/" + book?.author?.slug + "/" + book?.slug}>
+                            <div className="d-flex ">
+                              <p className="me-5"><Button type="primary">Xem chi tiết</Button> </p>
+                            </div>
+                          </Link>
                         </div>
                       </div>
-                    </Link>
-                  </Col>
+                    </div>
+                  </Card>
                 );
               }
               return null;
             })
           ) : (
-            <div
-              style={{ padding: 10, border: "1px solid", borderColor: "#ccc" }}
-            >
-              {" "}
-              ----- Chưa có sách nào ------ <Empty />
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+              <Empty
+                description={
+                  <span style={{ fontSize: '16px', color: '#666' }}>
+                    Chưa có sách nào
+                  </span>
+                }
+              />
             </div>
           )}
         </div>

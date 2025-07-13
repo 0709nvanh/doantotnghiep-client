@@ -132,6 +132,21 @@ const signIn = gql`
     }
 `
 
+const updateUser = gql`
+    mutation updateUserMutation($id: ID!, $name: String, $phone: String, $avatar: String){
+        updateUser(id: $id, input: {
+            name: $name, phone: $phone, avatar: $avatar
+        }){
+            id
+            name
+            email
+            phone
+            avatar
+            role
+        }
+    }
+`
+
 const logIn = gql`
     mutation loginMutation($name: String, $email: String){
         login(name: $name, email: $email){
@@ -237,5 +252,5 @@ const updateStatusComments = gql`
     }
 `
 export { addSingleBook, addSingleAuthor, updateSingleBook, 
-    signIn, updateSingleAuthor,  deleteAuthor, deleteBook, createOrder, 
+    signIn, updateUser, updateSingleAuthor,  deleteAuthor, deleteBook, createOrder, 
     updateStatusOrder, deleteStatusOrder, danhGiaOrder, logIn, loginWithPassword, addComments, deleteComment, deleteGenre, addSingleGenre, updateStatusComments, updateSingleQuantityBook }

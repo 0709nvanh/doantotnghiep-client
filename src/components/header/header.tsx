@@ -27,6 +27,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import formatprice from "../../common/formatprice";
 import { logout } from "../../features/auths/authSlice";
+import { loadUserCart, clearCart } from "../../features/cart/cartSlide";
+import { loadUserNotifications, clearNotifications } from "../../features/notifications/notificationSlide";
 import { getBooks } from "../../graphql-client/query";
 import "./header.css";
 
@@ -71,6 +73,17 @@ const Header = (props: Props) => {
 
 	const { width } = useWindowDimensions();
 	const location = useLocation();
+
+	// Load user's cart and notifications when user changes
+	useEffect(() => {
+		if (user?.id) {
+			dispatch(loadUserCart(user.id));
+			dispatch(loadUserNotifications(user.id));
+		} else {
+			dispatch(clearCart());
+			dispatch(clearNotifications());
+		}
+	}, [user?.id, dispatch]);
 
 	if (carts.length > 0) {
 		carts.forEach((cart: any) => {
@@ -222,7 +235,7 @@ const Header = (props: Props) => {
 		<Menu>
 			<h4 className="my-2 text-center">Thông báo mới nhận</h4>
 			<div className="header-scroll">
-				{user?.email && notifications.length > 0 ? (
+				{notifications.length > 0 ? (
 					notifications.map((item: any) => (
 						<Link
 							to="user/history"
@@ -242,7 +255,7 @@ const Header = (props: Props) => {
 					<div style={{ textAlign: "center" }}>Không có thông báo mới !</div>
 				)}
 			</div>
-			<Link to="/user/notifications" className="text-center d-block">
+			<Link to="/user/notifications" className="text-center d-block text-white">
 				Xem chi tiết
 			</Link>
 		</Menu>
@@ -292,9 +305,9 @@ const Header = (props: Props) => {
 				</Col>
 				<Col span={6}>
 					<Search
-						placeholder="Tìm kiếm"
+						placeholder=""
 						allowClear
-						enterButton="Search"
+						enterButton="Tìm kiếm"
 						size="large"
 						onSearch={onSearch}
 						onChange={handleChageSearch}
@@ -321,46 +334,48 @@ const Header = (props: Props) => {
 				<Col span={10}>
 					<Row style={{ alignItems: "center" }}>
 						<Col span={12} className="flex items-center gap-2">
-							<Dropdown.Button
-								overlay={Notification}
-								placement="bottomRight"
-                                size="large"
-								icon={
-									<div>
-										<BellOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
-										{user?.email && (
-											<span className="header-in-number">
-												{notifications.length}
-											</span>
-										)}
-									</div>
-								}
-							>
-								<Link to="/user/notifications">
-									{width > responesiveWidth && <span>Thông báo</span>}
-								</Link>
-							</Dropdown.Button>
-                            <Dropdown.Button
-								overlay={cartView}
-								placement="bottomRight"
-                                 size="large"
-								icon={
-									<div>
-										<ShoppingOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
-										<span className="header-in-number">{carts.length}</span>
-									</div>
-								}
-							>
-								<Link to="/cart">
-									{width > responesiveWidth && "Giỏ hàng của bạn"}
-								</Link>
-							</Dropdown.Button>
+							{user?.id && (
+								<>
+									<Dropdown.Button
+										overlay={Notification}
+										placement="bottomRight"
+										size="large"
+										icon={
+											<div>
+												<BellOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+												<span className="header-in-number">
+													{notifications.length}
+												</span>
+											</div>
+										}
+									>
+										<Link to="/user/notifications">
+											{width > responesiveWidth && <span>Thông báo</span>}
+										</Link>
+									</Dropdown.Button>
+									<Dropdown.Button
+										overlay={cartView}
+										placement="bottomRight"
+										size="large"
+										icon={
+											<div>
+												<ShoppingOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+												<span className="header-in-number">{carts.length}</span>
+											</div>
+										}
+									>
+										<Link to="/cart">
+											{width > responesiveWidth && "Giỏ hàng của bạn"}
+										</Link>
+									</Dropdown.Button>
+								</>
+							)}
 						</Col>
 						<Col span={12}>
 							{width < responesiveWidth || user?.name ? (
 								<Dropdown.Button
 									style={{ height: "100%" }}
-                                     size="large"
+									size="large"
 									overlay={menu}
 									placement="bottomCenter"
 									icon={<UserOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />}
@@ -369,7 +384,7 @@ const Header = (props: Props) => {
 								</Dropdown.Button>
 							) : (
 								<div className="d-flex">
-									<Button type="primary" style={{ height: "40px" }}  size="large">
+									<Button type="primary" style={{ height: "40px" }} size="large">
 										<Link style={{ color: "white" }} to="/login">
 											Đăng nhập
 										</Link>
@@ -377,7 +392,7 @@ const Header = (props: Props) => {
 									<Button
 										type="primary"
 										danger
-                                         size="large"
+										size="large"
 										style={{ height: "40px", marginLeft: "10px" }}
 									>
 										<Link style={{ color: "white" }} to="/register">

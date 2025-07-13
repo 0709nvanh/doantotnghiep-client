@@ -7,6 +7,11 @@ const { Search } = Input;
 
 const columns = [
   {
+    title: "STT",
+    dataIndex: "index",
+    render: (text: any, record: any, index: number) => index + 1,
+  },
+  {
     title: "Tên khách hàng",
     dataIndex: "name",
   },

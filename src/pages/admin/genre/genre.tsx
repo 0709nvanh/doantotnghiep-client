@@ -1,97 +1,103 @@
-import React, { useState } from "react";
-import { Button, Input, Spin, Table, Modal } from "antd";
-import { useMutation, useQuery } from "@apollo/client";
-import { getBooks, getGenres } from "@/graphql-client/query.tsx";
 import { deleteGenre } from "@/graphql-client/mutations.tsx";
-import { toastDefault } from "@/common/toast";
+import { getBooks, getGenres } from "@/graphql-client/query.tsx";
+import { useMutation, useQuery } from "@apollo/client";
+import { Input, Spin, Table, Tag, Button } from "antd";
+import { DownOutlined, UpOutlined } from "@ant-design/icons";
+import React, { useState } from "react";
 
 const { Search } = Input;
 
 const columns = [
   {
+    title: "STT",
+    dataIndex: "index",
+    render: (text: any, record: any, index: number) => index + 1,
+  },
+  {
     title: "Thể loại",
     dataIndex: "name",
   },
   {
+    title: "Số lượng sách",
+    dataIndex: "bookCount",
+  },
+  {
     title: "Tác phẩm tiêu biểu",
-    dataIndex: "books",
+    dataIndex: "sampleBooks",
   },
 ];
 
 const Genre: React.FC = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState<Array<string>>([]);
   const { loading: loading1, error: error1, data: data2 } = useQuery(getBooks);
   const { loading, error, data: data3 } = useQuery(getGenres);
   const [add, Mutation] = useMutation<any>(deleteGenre);
   const [keySearch, setKeySearch] = useState<string>("");
+  const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
   const inputSearchRef = React.useRef<any>("");
+  
   if (loading || loading1) {
     return <Spin size="large" />;
   }
   if (error || error1) {
     return <p>error authors ...</p>;
   }
-  const start = () => {
-    setTimeout(() => {
-      setSelectedRowKeys([]);
-    }, 1000);
-  };
+ 
   if (Mutation.loading) {
     return <Spin size="large" />;
   }
 
   const data1: any[] | undefined = [];
   for (let i = 0; i < data3?.genres.length; i++) {
-    const m = data2.books.filter(
+    const booksInGenre = data2.books.filter(
       (item: any) => item?.genre?.id === data3.genres[i].id,
     );
+    
     if (data3.genres[i].name.includes(keySearch)) {
       data1.push({
         key: data3.genres[i].id,
         name: data3.genres[i].name,
-        books: m.map((item: any, index: number) =>
-          index <= 1 ? <p key={item.id}>{item.name}</p> : "...",
-        ),
+        bookCount: booksInGenre.length,
+        sampleBooks: booksInGenre.slice(0, 3).map((book: any) => book.name).join(", "),
+        allBooks: booksInGenre, // Store all books for expand
       });
     }
   }
-
-  const onSelectChange = (selectedRowKeys: any) => {
-    console.log("selectedRowKeys changed: ", selectedRowKeys);
-    setSelectedRowKeys(selectedRowKeys);
-  };
-
-  const onRemove = () => {
-    Modal.confirm({
-      title: 'Xác nhận xóa thể loại',
-      content: 'Khi xóa thể loại, các tác phẩm của thể loại cũng bị xóa, bạn có muốn tiếp tục?',
-      okText: 'Xóa',
-      okType: 'danger',
-      cancelText: 'Hủy',
-      onOk() {
-        selectedRowKeys.forEach((id) => {
-          add({
-            variables: { id },
-            refetchQueries: [{ query: getGenres }, { query: getBooks }],
-          });
-        });
-        setSelectedRowKeys([]);
-        toastDefault("Xóa thể loại thành công");
-      },
-    });
-  };
-
-  const hasSelected = selectedRowKeys.length > 0;
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
 
   const onSearch = (value: string) => console.log(value);
 
   const handleChageSearch = () => {
     const search = inputSearchRef.current.input.value;
     setKeySearch(search);
+  };
+
+  const handleExpand = (expanded: boolean, record: any) => {
+    if (expanded) {
+      setExpandedRowKeys([...expandedRowKeys, record.key]);
+    } else {
+      setExpandedRowKeys(expandedRowKeys.filter(key => key !== record.key));
+    }
+  };
+
+  const expandedRowRender = (record: any) => {
+    const columns = [
+      { title: 'Tên sách', dataIndex: 'name', key: 'name' },
+      { title: 'Tác giả', dataIndex: 'author', key: 'author', render: (author: any) => author?.name },
+      { title: 'Giá', dataIndex: 'price', key: 'price', render: (price: number) => `${price.toLocaleString()} VNĐ` },
+      { title: 'Số lượng', dataIndex: 'quantity', key: 'quantity' },
+    ];
+
+    return (
+      <div style={{ padding: '16px' }}>
+        <h4>Danh sách tất cả sách trong thể loại "{record.name}"</h4>
+        <Table 
+          columns={columns} 
+          dataSource={record.allBooks} 
+          pagination={false}
+          size="small"
+          rowKey="id"
+        />
+      </div>
+    );
   };
 
   return (
@@ -103,32 +109,34 @@ const Genre: React.FC = () => {
         onSearch={onSearch}
         onChange={handleChageSearch}
         ref={inputSearchRef}
+        className="mb-4"
       />
-      <div style={{ marginBottom: 16, padding: 20 }}>
-        <Button
-          type="primary"
-          onClick={start}
-          disabled={!hasSelected}
-          loading={false}
-        >
-          Bỏ chọn
-        </Button>
-        <Button
-          danger
-          style={{ marginLeft: 20 }}
-          type="primary"
-          onClick={onRemove}
-          disabled={!hasSelected}
-          loading={false}
-        >
-          Xóa
-        </Button>
-        <span style={{ marginLeft: 8 }}>
-          {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
-        </span>
-      </div>
-      <Table rowSelection={rowSelection} columns={columns} dataSource={data1} />
+      <Table 
+        bordered 
+        columns={columns} 
+        dataSource={data1}
+        expandable={{
+          expandedRowRender,
+          onExpand: handleExpand,
+          expandedRowKeys,
+          expandIcon: ({ expanded, onExpand, record }) => 
+            expanded ? (
+              <UpOutlined 
+                onClick={e => onExpand(record, e)} 
+                onPointerEnterCapture={undefined} 
+                onPointerLeaveCapture={undefined} 
+              />
+            ) : (
+              <DownOutlined 
+                onClick={e => onExpand(record, e)} 
+                onPointerEnterCapture={undefined} 
+                onPointerLeaveCapture={undefined} 
+              />
+            ),
+        }}
+      />
     </div>
   );
 };
+
 export default Genre;

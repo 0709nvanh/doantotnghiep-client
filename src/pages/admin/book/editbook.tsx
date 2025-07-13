@@ -220,7 +220,7 @@ const Editbook: React.FC = () => {
 
           <Form.Item>
             <Button loading={Mutation.loading} type="primary" htmlType="submit">
-              Submit
+              Lưu thông tin
             </Button>
           </Form.Item>
         </Row>

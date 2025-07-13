@@ -9,6 +9,11 @@ const { Search } = Input;
 
 const columns = [
   {
+    title: "STT",
+    dataIndex: "index",
+    render: (text: any, record: any, index: number) => index + 1,
+  },
+  {
     title: "Tác giả",
     dataIndex: "name",
   },
@@ -104,30 +109,7 @@ const Author: React.FC = () => {
         onChange={handleChageSearch}
         ref={inputSearchRef}
       />
-      <div style={{ marginBottom: 16, paddingTop: 30 }}>
-        <Button
-          type="primary"
-          onClick={start}
-          disabled={!hasSelected}
-          loading={false}
-        >
-          Bỏ chọn
-        </Button>
-        <Button
-          danger
-          style={{ marginLeft: 20 }}
-          type="primary"
-          onClick={onRemove}
-          disabled={!hasSelected}
-          loading={false}
-        >
-          Xóa
-        </Button>
-        <span style={{ marginLeft: 8 }}>
-          {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
-        </span>
-      </div>
-      <Table rowSelection={rowSelection} columns={columns} dataSource={data1} />
+      <Table bordered className="mt-4" columns={columns} dataSource={data1} />
     </div>
   );
 };

@@ -14,6 +14,11 @@ const { Search } = Input;
 
 const columns = [
   {
+    title: "STT",
+    dataIndex: "index",
+    render: (text: any, record: any, index: number) => index + 1,
+  },
+  {
     title: "Tên khách hàng",
     dataIndex: "name",
   },
@@ -50,11 +55,6 @@ const columns = [
 const CartAdmin = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<Array<string>>([]);
   const { loading, error, data } = useQuery(getOrders);
-  const {
-    loading: loading1,
-    error: error1,
-    data: databook,
-  } = useQuery(getBooks);
   const [add, Mutation] = useMutation<any>(updateStatusOrder);
   const [dele, Muta] = useMutation<any>(deleteStatusOrder);
   const [updatequan, MuQuan] = useMutation<any>(updateSingleQuantityBook);
@@ -118,7 +118,7 @@ const CartAdmin = () => {
     let html = null;
     if (status === 2) {
       html = (
-        <div className="">
+        <div className="flex gap-2">
           <Button className="mb-2" onClick={() => handleRemoveOrder(id)} danger>
             Hủy đơn hàng
           </Button>
@@ -129,7 +129,7 @@ const CartAdmin = () => {
       );
     } else if (status === 3) {
       html = (
-        <div className="">
+        <div className="flex gap-2">
           <Button type="primary" disabled>
             Đang giao hàng
           </Button>
@@ -137,7 +137,7 @@ const CartAdmin = () => {
       );
     } else if (status === 4) {
       html = (
-        <div className="">
+        <div className="flex gap-2">
           <Button
             type="primary"
             disabled
@@ -149,7 +149,7 @@ const CartAdmin = () => {
       );
     } else if (status === 5) {
       html = (
-        <div className="">
+        <div className="flex gap-2">
           <Button danger disabled>
             Đơn hàng đã hủy
           </Button>
@@ -157,7 +157,7 @@ const CartAdmin = () => {
       );
     } else {
       html = (
-        <div className="">
+        <div className="flex gap-2">
           <Button className="mb-2" disabled type="primary">
             Chưa xác nhận
           </Button>
@@ -189,7 +189,7 @@ const CartAdmin = () => {
         status: showBtnStatus(data.orders[i].status, data.orders[i].id),
         cartDetail: (
           <Button type="primary">
-            <Link to={"/admin/cartDetail/" + data.orders[i].id}>
+            <Link to={"/admin/cartDetail/" + data.orders[i].id} className="text-white">
               Xem chi tiết
             </Link>
           </Button>
@@ -198,16 +198,6 @@ const CartAdmin = () => {
     }
   }
 
-  const onSelectChange = (selectedRowKeys: any) => {
-    console.log("selectedRowKeys changed: ", selectedRowKeys);
-    setSelectedRowKeys(selectedRowKeys);
-  };
-
-  const hasSelected = selectedRowKeys.length > 0;
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
   return (
     <div>
       <Search
@@ -218,20 +208,7 @@ const CartAdmin = () => {
         onChange={handleChageSearch}
         ref={inputSearchRef}
       />
-      <div style={{ marginBottom: 16 }}>
-        <Button
-          type="primary"
-          onClick={start}
-          disabled={!hasSelected}
-          loading={false}
-        >
-          Bỏ chọn
-        </Button>
-        <span style={{ marginLeft: 8 }}>
-          {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
-        </span>
-      </div>
-      <Table rowSelection={rowSelection} columns={columns} dataSource={data1} />
+      <Table className="mt-4" columns={columns} dataSource={data1} />
     </div>
   );
 };

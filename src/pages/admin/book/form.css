@@ -1,26 +1,34 @@
-.ant-form-item-required{
-    width: 200px;
+.ant-form-item-required {
+	width: 200px;
 }
-.ant-space-item{
-    height: 40px;
+.ant-space-item {
+	height: 40px;
 }
-.ant-form-item-label{
-    width: 200px;
-    align-items: center;
-    text-align: left;
+.ant-form-item-label {
+	width: 200px;
+	align-items: center;
+	text-align: left;
 }
-
 
 .muti-text {
-    display: block;
-    display: -webkit-box;
-    max-width: 100%;
-    height: 83px;
-    margin: 0 auto;
-    font-size: 14px;
-    line-height: 1;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+	display: block;
+	display: -webkit-box;
+	max-width: 100%;
+	height: 83px;
+	margin: 0 auto;
+	font-size: 14px;
+	line-height: 1;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.text-des-book {
+	width: 400px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}

@@ -33,7 +33,7 @@ import UserPage from './pages/user/user';
 import Profile from "./pages/user/profile/profile";
 import AddComment from "./pages/admin/comment/addComment";
 import Notification from "./pages/user/notification/index";
-
+import Dashboard from "./pages/admin/dashboard";
 
 
 type Props = {
@@ -73,7 +73,7 @@ const Router: React.FC<Props> = (props) => {
           <Route index element={<Navigate to="dashboard" />} />
           <Route path="cart" element={<CartAdmin />} />
           <Route path="cartDetail/:id" element={<CartDetail />} />
-          <Route path="dashboard" element={<div>Admin Dashboard</div>} />
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="user" element={<User />} />
           <Route path="authors" element={<Author />} />
           <Route path="genre" element={<Genre />} />
