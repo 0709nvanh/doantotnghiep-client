@@ -238,7 +238,7 @@ const Cart = () => {
               {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
             </span>
           </div>
-          <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+          <Table  rowSelection={rowSelection} columns={columns} dataSource={data} />
           <div className="muahang d-flex align-items-center justify-content-between my-3">
             <div className="cart-total">
               Tổng tiền:{" "}

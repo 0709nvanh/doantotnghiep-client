@@ -208,7 +208,7 @@ const CartAdmin = () => {
         onChange={handleChageSearch}
         ref={inputSearchRef}
       />
-      <Table className="mt-4" columns={columns} dataSource={data1} />
+      <Table className="mt-4" scroll={{ x: 'max-content' }} columns={columns} dataSource={data1} />
     </div>
   );
 };

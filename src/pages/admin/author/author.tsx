@@ -7,31 +7,34 @@ import { toastDefault } from "@/common/toast.tsx";
 
 const { Search } = Input;
 
-const columns = [
-  {
-    title: "STT",
-    dataIndex: "index",
-    render: (text: any, record: any, index: number) => index + 1,
-  },
-  {
-    title: "Tác giả",
-    dataIndex: "name",
-  },
-  {
-    title: "Tuổi",
-    dataIndex: "age",
-  },
-  {
-    title: "Địa chỉ",
-    dataIndex: "address",
-  },
-];
-
 const Author: React.FC = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<Array<string>>([]);
   const [keySearch, setKeySearch] = useState<string>("");
   const { loading, error, data } = useQuery(getAuthors);
   const [add, Mutation] = useMutation<any>(deleteAuthor);
+  const [page, setPage] = useState({ current: 1, pageSize: 10 });
+  const columns = [
+    {
+      title: "STT",
+      dataIndex: "index",
+      render: (text: any, record: any, index: number) => {
+        // Calculate index based on current page
+        return (page.current - 1) * page.pageSize + index + 1;
+      },
+    },
+    {
+      title: "Tác giả",
+      dataIndex: "name",
+    },
+    {
+      title: "Tuổi",
+      dataIndex: "age",
+    },
+    {
+      title: "Địa chỉ",
+      dataIndex: "address",
+    },
+  ];
   const inputSearchRef = useRef<any>("");
   if (loading) {
     return <Spin size="large" />;
@@ -60,6 +63,10 @@ const Author: React.FC = () => {
     }
   }
 
+  const handleTableChange = (pagination: any) => {
+    setPage(pagination);
+  };
+
   const onSelectChange = (selectedRowKeys: any) => {
     console.log("selectedRowKeys changed: ", selectedRowKeys);
     setSelectedRowKeys(selectedRowKeys);
@@ -67,11 +74,12 @@ const Author: React.FC = () => {
 
   const onRemove = () => {
     Modal.confirm({
-      title: 'Xác nhận xóa tác giả',
-      content: 'Khi xóa tác giả, các tác phẩm của tác giả cũng bị xóa, bạn có muốn tiếp tục?',
-      okText: 'Xóa',
-      okType: 'danger',
-      cancelText: 'Hủy',
+      title: "Xác nhận xóa tác giả",
+      content:
+        "Khi xóa tác giả, các tác phẩm của tác giả cũng bị xóa, bạn có muốn tiếp tục?",
+      okText: "Xóa",
+      okType: "danger",
+      cancelText: "Hủy",
       onOk() {
         console.log("id", selectedRowKeys);
         selectedRowKeys.forEach((id) => {
@@ -109,7 +117,15 @@ const Author: React.FC = () => {
         onChange={handleChageSearch}
         ref={inputSearchRef}
       />
-      <Table bordered className="mt-4" columns={columns} dataSource={data1} />
+      <Table
+        scroll={{ x: "max-content" }}
+        onChange={handleTableChange}
+        bordered
+        className="mt-4"
+        pagination={page}
+        columns={columns}
+        dataSource={data1}
+      />
     </div>
   );
 };

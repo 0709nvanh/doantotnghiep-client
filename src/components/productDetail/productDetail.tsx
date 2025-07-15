@@ -324,7 +324,7 @@ const ProductDetail = (props: Props) => {
               </Button>
               {isCmt && (
                 <div className="text-left">
-                  {data2.comments?.length > 0 ? (
+                  {data2?.comments?.length > 0 ? (
                     data2?.comments.map((cmt: any) => (
                       <>
                         <div style={{ display: "flex", alignItems: "center" }}>

@@ -94,6 +94,7 @@ const Genre: React.FC = () => {
           dataSource={record.allBooks} 
           pagination={false}
           size="small"
+          scroll={{ x: "max-content" }}
           rowKey="id"
         />
       </div>
@@ -113,6 +114,7 @@ const Genre: React.FC = () => {
       />
       <Table 
         bordered 
+        scroll={{ x: "max-content" }}
         columns={columns} 
         dataSource={data1}
         expandable={{

@@ -77,7 +77,7 @@ const CartDetail = () => {
   return (
     <div className="giohang">
       <h3 className="my-4">Chi tiết đơn đặt</h3>
-      <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+      <Table scroll={{ x: "max-content" }} columns={columns} dataSource={data} />
     </div>
   );
 };

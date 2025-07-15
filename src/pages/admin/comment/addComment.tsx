@@ -80,6 +80,7 @@ const Book: React.FC = () => {
     <Table
       onChange={handleTableChange}
       pagination={page}
+      scroll={{ x: "max-content" }}
       columns={columns}
       dataSource={data1}
     />

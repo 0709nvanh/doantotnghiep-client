@@ -26,7 +26,7 @@ const Book: React.FC = () => {
   if (error) {
     return <p>error book ...</p>;
   }
-  const columns = [
+  const columns: any = [
     {
       title: "STT",
       dataIndex: "index",
@@ -73,7 +73,6 @@ const Book: React.FC = () => {
     {
       title: "Action",
       dataIndex: "btnEdit",
-      width: 200,
     },
   ];
   const data1: any[] | undefined = [];
@@ -167,6 +166,7 @@ const Book: React.FC = () => {
         bordered
         onChange={handleTableChange}
         pagination={page}
+        scroll={{ x: 'max-content' }}
         columns={columns}
         dataSource={data1}
       />

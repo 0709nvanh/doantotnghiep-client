@@ -81,7 +81,7 @@ const User: React.FC = () => {
         onChange={handleChageSearch}
         ref={inputSearchRef}
       />
-      <Table columns={columns} dataSource={data1} />
+      <Table columns={columns} scroll={{ x: "max-content" }} dataSource={data1} />
     </div>
   );
 };

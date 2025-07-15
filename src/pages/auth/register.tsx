@@ -111,7 +111,7 @@ function Register() {
 
   return (
     <div>
-      <Row style={{ height: 800, margin: '0 auto', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <Row style={{ margin: '0 auto', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Col span={8}>
           <h2 style={{ margin: 40, textAlign: "center" }}>Đăng ký</h2>
           

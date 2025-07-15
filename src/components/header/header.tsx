@@ -293,8 +293,8 @@ const Header = (props: Props) => {
 
 	return (
 		<div className="header">
-			<Row style={{ padding: "30px 40px", alignItems: "center" }} gutter={[24, 24]}>
-				<Col span={8}>
+			<Row style={{ padding: "30px 0", alignItems: "center" }} gutter={[24, 24]}>
+				<Col span={8} sm={5}>
 					<Link to={"/"}>
 						<img
 							width="200"
@@ -303,7 +303,7 @@ const Header = (props: Props) => {
 						/>
 					</Link>
 				</Col>
-				<Col span={6}>
+				<Col span={6} sm={6}>
 					<Search
 						placeholder=""
 						allowClear
@@ -331,11 +331,11 @@ const Header = (props: Props) => {
 					) : null}
 				</Col>
 
-				<Col span={10}>
+				<Col span={10} sm={13}>
 					<Row style={{ alignItems: "center" }}>
-						<Col span={12} className="flex items-center gap-2">
+						<Col span={16} className="">
 							{user?.id && (
-								<>
+								<div className="flex justify-start">
 									<Dropdown.Button
 										overlay={Notification}
 										placement="bottomRight"
@@ -368,10 +368,10 @@ const Header = (props: Props) => {
 											{width > responesiveWidth && "Giỏ hàng của bạn"}
 										</Link>
 									</Dropdown.Button>
-								</>
+								</div>
 							)}
 						</Col>
-						<Col span={12}>
+						<Col span={8}>
 							{width < responesiveWidth || user?.name ? (
 								<Dropdown.Button
 									style={{ height: "100%" }}
