@@ -1,5 +1,4 @@
 import { Row, Typography } from "antd";
-import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { A11y, Navigation, Pagination, Scrollbar } from "swiper/modules";
 import "./aboutfooter.css";

@@ -1,13 +1,7 @@
-import React from 'react'
-
-interface Props {
-    
-}
-
-const Usedbooks = (props: Props) => {
+const Usedbooks = () => {
     return (
         <div>
-            
+
         </div>
     )
 }

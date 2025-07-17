@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { Avatar, Button, Col, Input, Modal, Rate, Row, Spin } from "antd";
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import formatprice from "@/common/formatprice";
 import { toastDefault } from "@/common/toast";
@@ -26,9 +26,9 @@ const HistoryItem = (props: Props) => {
   const chi_tiet_don_huy = "Chi tiết đơn hủy";
   const dispatch = useDispatch();
   const { order } = props;
-  const [add, Mutation] = useMutation<any>(updateStatusOrder);
-  const [dele, Muta] = useMutation<any>(deleteStatusOrder);
-  const [upSao, MutaSao] = useMutation<any>(danhGiaOrder);
+  const [add] = useMutation<any>(updateStatusOrder);
+  const [dele] = useMutation<any>(deleteStatusOrder);
+  const [upSao] = useMutation<any>(danhGiaOrder);
   const [addOrder, MutaOrder] = useMutation<any>(createOrder);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isViewModal, setIsViewModal] = useState<String>("");

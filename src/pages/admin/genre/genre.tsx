@@ -1,7 +1,6 @@
-import { deleteGenre } from "@/graphql-client/mutations.tsx";
 import { getBooks, getGenres } from "@/graphql-client/query.tsx";
-import { useMutation, useQuery } from "@apollo/client";
-import { Input, Spin, Table, Tag, Button } from "antd";
+import { useQuery } from "@apollo/client";
+import { Input, Spin, Table } from "antd";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
 
@@ -11,7 +10,7 @@ const columns = [
   {
     title: "STT",
     dataIndex: "index",
-    render: (text: any, record: any, index: number) => index + 1,
+    render: (_text: any, _record: any, index: number) => index + 1,
   },
   {
     title: "Thể loại",
@@ -30,28 +29,22 @@ const columns = [
 const Genre: React.FC = () => {
   const { loading: loading1, error: error1, data: data2 } = useQuery(getBooks);
   const { loading, error, data: data3 } = useQuery(getGenres);
-  const [add, Mutation] = useMutation<any>(deleteGenre);
   const [keySearch, setKeySearch] = useState<string>("");
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
   const inputSearchRef = React.useRef<any>("");
-  
+
   if (loading || loading1) {
     return <Spin size="large" />;
   }
   if (error || error1) {
     return <p>error authors ...</p>;
   }
- 
-  if (Mutation.loading) {
-    return <Spin size="large" />;
-  }
-
   const data1: any[] | undefined = [];
   for (let i = 0; i < data3?.genres.length; i++) {
     const booksInGenre = data2.books.filter(
       (item: any) => item?.genre?.id === data3.genres[i].id,
     );
-    
+
     if (data3.genres[i].name.includes(keySearch)) {
       data1.push({
         key: data3.genres[i].id,
@@ -89,9 +82,9 @@ const Genre: React.FC = () => {
     return (
       <div style={{ padding: '16px' }}>
         <h4>Danh sách tất cả sách trong thể loại "{record.name}"</h4>
-        <Table 
-          columns={columns} 
-          dataSource={record.allBooks} 
+        <Table
+          columns={columns}
+          dataSource={record.allBooks}
           pagination={false}
           size="small"
           scroll={{ x: "max-content" }}
@@ -112,27 +105,27 @@ const Genre: React.FC = () => {
         ref={inputSearchRef}
         className="mb-4"
       />
-      <Table 
-        bordered 
+      <Table
+        bordered
         scroll={{ x: "max-content" }}
-        columns={columns} 
+        columns={columns}
         dataSource={data1}
         expandable={{
           expandedRowRender,
           onExpand: handleExpand,
           expandedRowKeys,
-          expandIcon: ({ expanded, onExpand, record }) => 
+          expandIcon: ({ expanded, onExpand, record }) =>
             expanded ? (
-              <UpOutlined 
-                onClick={e => onExpand(record, e)} 
-                onPointerEnterCapture={undefined} 
-                onPointerLeaveCapture={undefined} 
+              <UpOutlined
+                onClick={e => onExpand(record, e)}
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
               />
             ) : (
-              <DownOutlined 
-                onClick={e => onExpand(record, e)} 
-                onPointerEnterCapture={undefined} 
-                onPointerLeaveCapture={undefined} 
+              <DownOutlined
+                onClick={e => onExpand(record, e)}
+                onPointerEnterCapture={undefined}
+                onPointerLeaveCapture={undefined}
               />
             ),
         }}

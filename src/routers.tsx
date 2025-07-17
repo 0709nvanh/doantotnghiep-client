@@ -40,7 +40,7 @@ type Props = {
 
 };
 
-const Router: React.FC<Props> = (props) => {
+const Router: React.FC<Props> = () => {
   return (
     <div>
       <Routes>

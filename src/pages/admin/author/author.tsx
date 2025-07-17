@@ -1,23 +1,19 @@
 import React, { useRef, useState } from "react";
-import { Button, Input, Spin, Table, Modal } from "antd";
-import { useMutation, useQuery } from "@apollo/client";
-import { getAuthors, getBooks } from "@/graphql-client/query.tsx";
-import { deleteAuthor } from "@/graphql-client/mutations.tsx";
-import { toastDefault } from "@/common/toast.tsx";
+import { Input, Spin, Table } from "antd";
+import { useQuery } from "@apollo/client";
+import { getAuthors } from "@/graphql-client/query.tsx";
 
 const { Search } = Input;
 
 const Author: React.FC = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState<Array<string>>([]);
   const [keySearch, setKeySearch] = useState<string>("");
   const { loading, error, data } = useQuery(getAuthors);
-  const [add, Mutation] = useMutation<any>(deleteAuthor);
   const [page, setPage] = useState({ current: 1, pageSize: 10 });
   const columns = [
     {
       title: "STT",
       dataIndex: "index",
-      render: (text: any, record: any, index: number) => {
+      render: (_text: any, _record: any, index: number) => {
         // Calculate index based on current page
         return (page.current - 1) * page.pageSize + index + 1;
       },
@@ -42,14 +38,6 @@ const Author: React.FC = () => {
   if (error) {
     return <p>error authors ...</p>;
   }
-  const start = () => {
-    setTimeout(() => {
-      setSelectedRowKeys([]);
-    }, 1000);
-  };
-  if (Mutation.loading) {
-    return <Spin size="large" />;
-  }
 
   const data1: any[] | undefined = [];
   for (const element of data.authors) {
@@ -65,39 +53,6 @@ const Author: React.FC = () => {
 
   const handleTableChange = (pagination: any) => {
     setPage(pagination);
-  };
-
-  const onSelectChange = (selectedRowKeys: any) => {
-    console.log("selectedRowKeys changed: ", selectedRowKeys);
-    setSelectedRowKeys(selectedRowKeys);
-  };
-
-  const onRemove = () => {
-    Modal.confirm({
-      title: "Xác nhận xóa tác giả",
-      content:
-        "Khi xóa tác giả, các tác phẩm của tác giả cũng bị xóa, bạn có muốn tiếp tục?",
-      okText: "Xóa",
-      okType: "danger",
-      cancelText: "Hủy",
-      onOk() {
-        console.log("id", selectedRowKeys);
-        selectedRowKeys.forEach((id) => {
-          add({
-            variables: { id },
-            refetchQueries: [{ query: getAuthors }, { query: getBooks }],
-          });
-        });
-        setSelectedRowKeys([]);
-        toastDefault("Xóa tác giả thành công");
-      },
-    });
-  };
-
-  const hasSelected = selectedRowKeys.length > 0;
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
   };
 
   const onSearch = (value: string) => console.log(value);

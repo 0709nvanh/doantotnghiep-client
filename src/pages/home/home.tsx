@@ -3,12 +3,7 @@ import CarouselComponent from './carousel/Carousel';
 import Footerhover from './footerhover/footerhover';
 import ProductComponent from './product/productComponent';
 
-
-interface Props {
-
-}
-
-const Home = (props: Props) => {
+const Home = () => {
     return (
         <div>
             <CarouselComponent />

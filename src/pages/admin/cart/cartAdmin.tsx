@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import formatprice from "@/common/formatprice";
 import {
-  deleteStatusOrder,
   updateSingleQuantityBook,
   updateStatusOrder,
 } from "@/graphql-client/mutations.tsx";
@@ -15,12 +14,10 @@ const { Search } = Input;
 
 
 const CartAdmin = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState<Array<string>>([]);
   const { loading, error, data } = useQuery(getOrders);
-  const [add, Mutation] = useMutation<any>(updateStatusOrder);
-  const [dele, Muta] = useMutation<any>(deleteStatusOrder);
+  const [add] = useMutation<any>(updateStatusOrder);
   const [page, setPage] = useState({ current: 1, pageSize: 10 });
-  const [updatequan, MuQuan] = useMutation<any>(updateSingleQuantityBook);
+  const [updatequan] = useMutation<any>(updateSingleQuantityBook);
   const [keySearch, setKeySearch] = useState<string>("");
   const inputSearchRef = React.useRef<any>("");
   // const [add, Mutation] = useMutation<any>(deleteBook);
@@ -30,11 +27,7 @@ const CartAdmin = () => {
   if (error) {
     return <p>error book ...</p>;
   }
-  const start = () => {
-    setTimeout(() => {
-      setSelectedRowKeys([]);
-    }, 1000);
-  };
+
   const handleRemoveOrder = (_id: string) => {
     const orderDetail = data.orders;
     let listChoose = "";
@@ -47,7 +40,6 @@ const CartAdmin = () => {
     console.log(listChoose);
     const _listOrder = JSON.parse(listChoose);
     for (let i = 0; i < _listOrder.length; i++) {
-      const slmua = _listOrder[i].quantity;
       const idBook = _listOrder[i].book.id;
 
       updatequan({
@@ -68,7 +60,7 @@ const CartAdmin = () => {
     {
       title: "STT",
       dataIndex: "index",
-      render: (text: any, record: any, index: number) => {
+      render: (_text: any, _record: any, index: number) => {
         // Calculate index based on current page
         return (page.current - 1) * page.pageSize + index + 1;
       },
@@ -119,7 +111,7 @@ const CartAdmin = () => {
 
   const onSearch = (value: string) => console.log(value);
 
-  const handleChageSearch = (e: any) => {
+  const handleChageSearch = () => {
     const search = inputSearchRef.current.input.value;
     setKeySearch(search);
   };

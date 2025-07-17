@@ -1,9 +1,7 @@
-import React from "react";
 import { Row, Col, Typography } from "antd";
 import "./footer.css";
-interface Props { }
 
-const Footer = (props: Props) => {
+const Footer = () => {
 	return (
 		<div className="footer">
 			<div className="footer-top">

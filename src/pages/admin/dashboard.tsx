@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card, Row, Col, Spin } from 'antd';
 import { Bar, Pie } from 'react-chartjs-2';
 import 'chart.js/auto';

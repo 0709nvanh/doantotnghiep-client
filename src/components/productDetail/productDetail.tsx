@@ -24,9 +24,7 @@ import { addComments, deleteComment } from "../../graphql-client/mutations";
 
 const { TextArea } = Input;
 
-interface Props { }
-
-const ProductDetail = (props: Props) => {
+const ProductDetail = () => {
   const { slugProduct: slug } = useParams();
 
   const navigate = useNavigate();
@@ -46,8 +44,6 @@ const ProductDetail = (props: Props) => {
 
   const { loading: loading1, error: error1, data: data1 } = useQuery(getBooks);
   const {
-    loading: loading2,
-    error: error2,
     data: data2,
   } = useQuery(getComments, {
     variables: {
@@ -121,7 +117,7 @@ const ProductDetail = (props: Props) => {
           image: JSON.parse(data.book.image)[0],
         },
       };
-      
+
       dispatch(addToCart({ cart, userId: user.id }));
       setCount(1);
       toastDefault("Thêm sách vào giỏ hàng thành công");
@@ -278,12 +274,12 @@ const ProductDetail = (props: Props) => {
                     </Button>
                   </div>
                 </div>
-                
+
                 <div className="product-description-content mt-3 d-flex">
                   <div>
                     <span>Thể loại: <span className="fw-bold">{data.book?.genre?.name}</span></span>
                   </div>
-                  
+
                   <div className="tag">
                     {/* <span>
                       Tags: <p>Tag 0-1</p>

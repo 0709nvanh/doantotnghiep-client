@@ -3,11 +3,7 @@ import { Avatar, Col, Row } from 'antd'
 import { useSelector } from 'react-redux'
 import { Link, Outlet } from 'react-router-dom'
 
-interface Props {
-
-}
-
-const UserPage = (props: Props) => {
+const UserPage = () => {
     const user = useSelector((state: any) => state.auth.user)
     return (
         <div className="bg-light">

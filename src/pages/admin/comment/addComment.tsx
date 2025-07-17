@@ -15,7 +15,7 @@ const Book: React.FC = () => {
     {
       title: "STT",
       dataIndex: "index",
-      render: (text: any, record: any, index: number) => index + 1,
+      render: (_text: any, _record: any, index: number) => index + 1,
     },
     {
       title: "Người bình luận",

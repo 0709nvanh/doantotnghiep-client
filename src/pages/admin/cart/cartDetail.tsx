@@ -1,6 +1,5 @@
 import { useQuery } from "@apollo/client";
 import { Spin, Table } from "antd";
-import { useState } from "react";
 import { useParams } from "react-router-dom";
 import formatprice from "@/common/formatprice";
 import { getSingleOrder } from "@/graphql-client/query.tsx";
@@ -33,7 +32,6 @@ const columns = [
 ];
 
 const CartDetail = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState<Array<string>>([]);
   const { id } = useParams();
 
   const { loading, data: data1 } = useQuery(getSingleOrder, {
@@ -64,16 +62,6 @@ const CartDetail = () => {
       totalBook: formatprice(orderItem.quantity * orderItem.book.price),
     });
   });
-
-  const onSelectChange = (selectedRowKeys: any) => {
-    setSelectedRowKeys(selectedRowKeys);
-  };
-
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
-
   return (
     <div className="giohang">
       <h3 className="my-4">Chi tiết đơn đặt</h3>

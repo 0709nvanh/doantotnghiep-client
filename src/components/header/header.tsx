@@ -33,7 +33,6 @@ import { getBooks } from "../../graphql-client/query";
 import "./header.css";
 
 const { Search } = Input;
-interface Props { }
 
 const responesiveWidth = 1100;
 
@@ -62,7 +61,7 @@ function useWindowDimensions() {
 	return windowDimensions;
 }
 
-const Header = (props: Props) => {
+const Header = () => {
 	const dispatch = useDispatch();
 	const carts = useSelector((state: any) => state.cart.carts);
 	const notifications = useSelector(
@@ -103,10 +102,10 @@ const Header = (props: Props) => {
 	if (loading) {
 		return <Spin size="large" />;
 	}
-	const handleChageSearch = (e: any) => {
+	const handleChageSearch = () => {
 		setIsShowViewSearch(true);
 		let timeout: any = null;
-		var keyUpEventHandler2 = function (event: any) {
+		var keyUpEventHandler2 = function () {
 			clearTimeout(timeout);
 			setIsLoading(true);
 			timeout = setTimeout(async () => {
@@ -139,7 +138,7 @@ const Header = (props: Props) => {
 		setIsShowViewSearch(false);
 	};
 	const handleLogout = () => {
-		dispatch(logout({}));
+		dispatch(logout());
 	};
 
 	const menu = (

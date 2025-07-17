@@ -1,7 +1,5 @@
 import {
-    AppstoreOutlined,
     DashboardOutlined,
-    SettingOutlined, 
     UserOutlined,
     BookOutlined,
     ShoppingCartOutlined,
@@ -29,7 +27,7 @@ const LayoutAdmin: React.FC = () => {
         navigate('/')
         toastError('Bạn không có quyền truy cập trang này !!!')
     }
-    const { loading, error, data } = useQuery(getUserQuery, {
+    const { loading, data } = useQuery(getUserQuery, {
         variables: {
             email: user.email,
         }
@@ -49,7 +47,7 @@ const LayoutAdmin: React.FC = () => {
     };
 
     const logoutAdmin = () => {
-        dispatch(logout({}))
+        dispatch(logout())
     }
 
     return (

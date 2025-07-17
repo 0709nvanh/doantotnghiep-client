@@ -7,8 +7,11 @@
 		"dev": "vite",
 		"build": "tsc && vite build",
 		"preview": "vite preview",
-		"lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+		"lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+		"predeploy": "npm run build",
+		"deploy": "gh-pages -d build"
 	},
+	"homepage": "https://0709nvanh.github.io/doantotnghiep-client",
 	"dependencies": {
 		"@ant-design/icons": "^4.7.0",
 		"@apollo/client": "^3.4.16",
@@ -17,6 +20,7 @@
 		"bootstrap": "^5.3.5",
 		"chart.js": "^4.5.0",
 		"firebase": "^11.6.0",
+		"gh-pages": "^6.3.0",
 		"graphql": "^15.7.2",
 		"html2canvas": "^1.4.1",
 		"jspdf": "^2.5.1",

@@ -12,7 +12,7 @@ import "bootstrap/dist/css/bootstrap.css"
 // khởi tạo apollo client
 const client = new ApolloClient({
 	cache: new InMemoryCache(),
-	uri: "http://localhost:9000/graphql",
+	uri: "https://doantotnghiep-server.onrender.com/graphql",
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

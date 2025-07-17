@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Spin, Row, Col } from 'antd';
-import React from 'react';
+import { Spin } from 'antd';
 import { Link } from 'react-router-dom';
 import { getBooks } from '../../../graphql-client/query';
 import './index.css';
@@ -9,7 +8,7 @@ interface Props {
 }
 
 const ProductComponent = (props: Props) => {
-    const {page} = props;
+    const { page } = props;
     const { loading, error, data } = useQuery(getBooks)
     console.log(data);
 
@@ -20,22 +19,22 @@ const ProductComponent = (props: Props) => {
         return <p>error book ...</p>
     }
     const productPage = [];
-    if(data?.books){
-        for (let i = page*4; i < 4 + page*4; i++) {
+    if (data?.books) {
+        for (let i = page * 4; i < 4 + page * 4; i++) {
             productPage.push(data.books[i])
         }
     }
 
     return (
-        <div style={{width: '100%'}}>
+        <div style={{ width: '100%' }}>
             <div className="component-product">
                 <ul className="align">
                     {/* 1 sản phẩm */}
                     {
                         data && productPage.map((book: any) => {
-                            if(book?.id){
+                            if (book?.id) {
                                 return (
-                                
+
                                     <li key={book.id}>
                                         <figure className="book">
                                             <ul className="hardcover_front">
@@ -64,14 +63,14 @@ const ProductComponent = (props: Props) => {
                                             <figcaption>
                                                 <h1 className='text-white'>{book?.name}</h1>
                                                 <span>By {book?.author?.name}</span>
-                                                <p className="muti-text" style={{color: "white"}}>
+                                                <p className="muti-text" style={{ color: "white" }}>
                                                     {book?.des}
                                                 </p>
                                             </figcaption>
                                         </figure>
                                     </li>
                                 )
-                            }else{
+                            } else {
                                 return null;
                             }
                         })

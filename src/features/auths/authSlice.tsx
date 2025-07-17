@@ -1,4 +1,3 @@
-import { toastDefault } from '@/common/toast'
 import { createSlice } from '@reduxjs/toolkit'
 
 export interface AuthState {
@@ -19,7 +18,7 @@ export const authSlice = createSlice({
     register: (state, action) => {
       state.user = action.payload
     },
-    logout: (state, action) => {
+    logout: (state) => {
       state.user = {}
     },
     updateAvatar: (state, action) => {

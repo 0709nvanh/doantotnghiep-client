@@ -1,6 +1,6 @@
 import { DeleteOutlined } from "@ant-design/icons";
 import { useMutation } from "@apollo/client";
-import { Button, Form, Input, Spin, Table, Modal } from "antd";
+import { Button, Form, Input, Table, Modal } from "antd";
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";

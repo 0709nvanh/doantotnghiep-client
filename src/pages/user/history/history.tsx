@@ -1,13 +1,11 @@
 import { useQuery } from '@apollo/client';
 import { Col, Row, Spin } from 'antd';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getOrderByEmail } from '../../../graphql-client/query';
 import './history.css';
 import HistoryItem from './historyItem';
-interface Props {
 
-}
 const keyMenu = [
     {
         id: 'all',
@@ -34,7 +32,7 @@ const keyMenu = [
         name: 'Đã hủy'
     },
 ]
-const History = (props: Props) => {
+const History = () => {
     const [menuActive, setMenuActive] = useState({
         id: 'all',
         name: 'Tất cả'

@@ -1,25 +1,18 @@
-import { useMutation, useQuery } from "@apollo/client";
-import { Button, Input, Spin, Table, Modal } from "antd";
+import { useQuery } from "@apollo/client";
+import { Button, Input, Spin, Table } from "antd";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import formatprice from "@/common/formatprice";
-import { toastDefault } from "@/common/toast.tsx";
-import { deleteBook } from "@/graphql-client/mutations.tsx";
 import { getBooks } from "@/graphql-client/query.tsx";
 import "./form.css";
 
 const { Search } = Input;
 
 const Book: React.FC = () => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState<Array<string>>([]);
   const [keySearch, setKeySearch] = useState<string>("");
   const { loading, error, data } = useQuery(getBooks);
-  const [add, Mutation] = useMutation<any>(deleteBook);
   const [page, setPage] = useState({ current: 1, pageSize: 5 });
   const inputSearchRef = React.useRef<any>("");
-  if (Mutation.loading) {
-    return <Spin size="large" />;
-  }
   if (loading) {
     return <Spin size="large" />;
   }
@@ -30,7 +23,7 @@ const Book: React.FC = () => {
     {
       title: "STT",
       dataIndex: "index",
-      render: (text: any, record: any, index: number) => {
+      render: (_text: any, _record: any, index: number) => {
         // Calculate index based on current page
         return (page.current - 1) * page.pageSize + index + 1;
       },
@@ -117,36 +110,6 @@ const Book: React.FC = () => {
     setKeySearch(search);
   };
 
-  const onSelectChange = (selectedRowKeys: any) => {
-    console.log("selectedRowKeys changed: ", selectedRowKeys);
-    setSelectedRowKeys(selectedRowKeys);
-  };
-
-  const onRemove = () => {
-    Modal.confirm({
-      title: 'Xác nhận xóa',
-      content: `Bạn có chắc chắn muốn xóa ${selectedRowKeys.length} sách đã chọn?`,
-      okText: 'Xóa',
-      okType: 'danger',
-      cancelText: 'Hủy',
-      onOk() {
-        selectedRowKeys.forEach((id) => {
-          add({
-            variables: { id },
-            refetchQueries: [{ query: getBooks }],
-          });
-        });
-        setSelectedRowKeys([]);
-        toastDefault("Xóa sách thành công");
-      },
-    });
-  };
-
-  const hasSelected = selectedRowKeys.length > 0;
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
 
   const handleTableChange = (pagination: any) => {
     setPage(pagination);

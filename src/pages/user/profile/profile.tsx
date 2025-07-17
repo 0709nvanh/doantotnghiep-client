@@ -15,9 +15,7 @@ import { updateUser as updateUserMutation } from "../../../graphql-client/mutati
 import { getUserQuery } from "../../../graphql-client/query";
 import { toastDefault } from "../../../common/toast";
 
-interface Props {}
-
-const Profile = (props: Props) => {
+const Profile = () => {
 	const [form] = Form.useForm();
 	const [loading, setLoading] = useState(false);
 	const [updateUserMutationHook, { loading: updateLoading }] = useMutation<any>(updateUserMutation);

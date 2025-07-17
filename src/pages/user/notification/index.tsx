@@ -1,5 +1,4 @@
-import { useQuery } from '@apollo/client';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
@@ -7,11 +6,8 @@ import '../history/history.css';
 import { Link } from 'react-router-dom';
 import { loadUserNotifications } from '../../../features/notifications/notificationSlide';
 
-interface Props {
 
-}
-
-const Notification = (props: Props) => {
+const Notification = () => {
     const notifications = useSelector((state: any) => state.notifications.notifications);
     const user = useSelector((state: any) => state.auth.user);
     const dispatch = useDispatch();

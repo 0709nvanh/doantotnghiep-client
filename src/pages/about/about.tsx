@@ -1,11 +1,6 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
 import './index.css'
-interface Props {
 
-}
-
-const About = (props: Props) => {
+const About = () => {
     return (
         <div>
             {/* End header-Bottom */}
