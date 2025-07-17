@@ -52,18 +52,17 @@ const History = (props: Props) => {
         setMenuActive(menu)
     }
     let dataOrder: any[] = []
-    if(data?.orders){
-        data.orders.forEach((order: any) => {
-            dataOrder.unshift(order)
-        })
+    if (data?.orders) {
+        // Sắp xếp theo ngày mới nhất lên đầu
+        dataOrder = [...data.orders].sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
     }
     let dataOrderFilter = dataOrder;
-    if(menuActive.id !=='all'){
+    if (menuActive.id !== 'all') {
         dataOrderFilter = dataOrder.filter((order: any) => order.status === menuActive.id);
     }
     console.log(dataOrderFilter);
 
-    
+
     return (
         <div>
             <Row className="history-nav-list">
@@ -75,7 +74,7 @@ const History = (props: Props) => {
                     </Col>
                 ))}
             </Row>
-            {dataOrderFilter.length > 0 ? dataOrderFilter.map((data:any) => <div key={data.id}><HistoryItem order={data}/></div>) : null}
+            {dataOrderFilter.length > 0 ? dataOrderFilter.map((data: any) => <div key={data.id}><HistoryItem order={data} /></div>) : null}
         </div>
     )
 }

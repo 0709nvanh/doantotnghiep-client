@@ -92,11 +92,6 @@ const Cart = () => {
       setSelectedRowKeys([]);
     }, 1000);
   };
-
-  if (Mutation.loading) {
-    return <Spin size="large" />;
-  }
-
   // Show login requirement if not logged in
   if (!user?.id) {
     return (
@@ -192,20 +187,26 @@ const Cart = () => {
         listOrder: JSON.stringify(selectedRowKeys),
         status: 1,
       };
-      selectedRowKeys.forEach((cart: any) => {
-        dispatch(removeCart({ bookId: cart.book.id, userId: user.id }));
-      });
-      setTotal(0);
       add({
         variables: data,
         refetchQueries: [
           { query: getOrderByEmail, variables: { email: user?.email } },
         ],
+      }).then((res) => {
+        console.log("Đặt hàng thành công", res);
+        selectedRowKeys.forEach((cart: any) => {
+          dispatch(removeCart({ bookId: cart.book.id, userId: user.id }));
+        });
+        setTotal(0);
+        setSelectedRowKeys([]);
+        setTimeout(() => {
+          toastDefault("Đặt hàng thành công");
+        }, 1000);
+      }).catch((error: any) => {
+        console.log("Lỗi đặt hàng", error);
+        toastError(error.message || "Đặt hàng thất bại");
       });
-      setSelectedRowKeys([]);
-      setTimeout(() => {
-        toastDefault("Đặt hàng thành công");
-      }, 1000);
+
     }
   };
 
@@ -235,7 +236,7 @@ const Cart = () => {
               {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
             </span>
           </div>
-          <Table  rowSelection={rowSelection} columns={columns} dataSource={data} />
+          <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
           <div className="muahang d-flex align-items-center justify-content-between my-3">
             <div className="cart-total">
               Tổng tiền:{" "}
@@ -289,7 +290,7 @@ const Cart = () => {
                 style={{ marginLeft: 20 }}
                 type="primary"
                 disabled={!hasSelected}
-                loading={false}
+                loading={Mutation.loading}
               >
                 Đặt hàng
               </Button>

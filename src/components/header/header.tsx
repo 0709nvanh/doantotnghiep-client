@@ -33,7 +33,7 @@ import { getBooks } from "../../graphql-client/query";
 import "./header.css";
 
 const { Search } = Input;
-interface Props {}
+interface Props { }
 
 const responesiveWidth = 1100;
 
@@ -113,7 +113,7 @@ const Header = (props: Props) => {
 				const search = inputSearchRef.current.input.value;
 				if (search !== "") {
 					setTimeout(() => {
-						setKeySearch(search);
+						setKeySearch(search?.trim());
 						setIsLoading(false);
 					}, 1000);
 				} else {
@@ -130,7 +130,7 @@ const Header = (props: Props) => {
 	let dataFilter: any[] = [];
 	if (keySearch !== "") {
 		dataFilter = data1.books.filter((book: any) =>
-			book.name.toLowerCase().includes(keySearch.toLowerCase()),
+			book.name.toLowerCase().includes(keySearch?.trim()?.toLowerCase()),
 		);
 	}
 	const handleClickRemove = () => {

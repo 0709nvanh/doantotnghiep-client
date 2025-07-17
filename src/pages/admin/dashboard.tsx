@@ -39,7 +39,7 @@ const Dashboard = () => {
         listOrder.forEach((item: any) => {
           total += item.quantity * item.book.price;
         });
-      } catch {}
+      } catch { }
       if (!revenueByMonth[month]) revenueByMonth[month] = 0;
       revenueByMonth[month] += total;
     });
@@ -89,6 +89,70 @@ const Dashboard = () => {
     ],
   };
 
+  // Tính doanh thu và số lượng bán cho từng sách
+  const bookRevenueMap: { [bookId: string]: { name: string; revenue: number; quantity: number } } = {};
+  if (ordersData?.orders) {
+    ordersData.orders.forEach((order: any) => {
+      if (order.status !== 4) return; // chỉ tính đơn thành công
+      try {
+        const listOrder = JSON.parse(order.listOrder);
+        listOrder.forEach((item: any) => {
+          const bookId = item.book.id;
+          if (!bookRevenueMap[bookId]) {
+            bookRevenueMap[bookId] = {
+              name: item.book.name,
+              revenue: 0,
+              quantity: 0,
+            };
+          }
+          bookRevenueMap[bookId].revenue += item.quantity * item.book.price;
+          bookRevenueMap[bookId].quantity += item.quantity;
+        });
+      } catch { }
+    });
+  }
+
+  // Lấy top 10 sách doanh thu cao nhất
+  const topRevenueBooks = Object.values(bookRevenueMap)
+    .sort((a, b) => b.revenue - a.revenue)
+    .slice(0, 10);
+  // Lấy top 10 sách bán được nhiều nhất
+  const topSoldBooks = Object.values(bookRevenueMap)
+    .sort((a, b) => b.quantity - a.quantity)
+    .slice(0, 10);
+
+  const topRevenueData = {
+    labels: topRevenueBooks.map((b) => b.name),
+    datasets: [
+      {
+        label: 'Doanh thu (VNĐ)',
+        data: topRevenueBooks.map((b) => b.revenue),
+        backgroundColor: 'rgba(255,99,132,0.4)',
+        borderColor: 'rgba(255,99,132,1)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const topSoldPieData = {
+    labels: topSoldBooks.map((b) => b.name),
+    datasets: [
+      {
+        label: 'Số lượng bán',
+        data: topSoldBooks.map((b) => b.quantity),
+        backgroundColor: [
+          '#FF6384',
+          '#36A2EB',
+          '#FFCE56',
+          '#4BC0C0',
+          '#9966FF',
+        ],
+        borderWidth: 2,
+        borderColor: '#fff',
+      },
+    ],
+  };
+
   const cardStyle = {
     cursor: 'pointer',
     borderRadius: '12px',
@@ -105,8 +169,8 @@ const Dashboard = () => {
     <div style={{ padding: 24 }}>
       <Row gutter={16}>
         <Col span={6}>
-          <Card 
-            title="Sách" 
+          <Card
+            title="Sách"
             style={cardStyle}
             onClick={() => navigate('/admin/books')}
             hoverable
@@ -120,8 +184,8 @@ const Dashboard = () => {
           </Card>
         </Col>
         <Col span={6}>
-          <Card 
-            title="Người dùng" 
+          <Card
+            title="Người dùng"
             style={cardStyle}
             onClick={() => navigate('/admin/user')}
             hoverable
@@ -135,8 +199,8 @@ const Dashboard = () => {
           </Card>
         </Col>
         <Col span={6}>
-          <Card 
-            title="Thể loại" 
+          <Card
+            title="Thể loại"
             style={cardStyle}
             onClick={() => navigate('/admin/genre')}
             hoverable
@@ -150,8 +214,8 @@ const Dashboard = () => {
           </Card>
         </Col>
         <Col span={6}>
-          <Card 
-            title="Tác giả" 
+          <Card
+            title="Tác giả"
             style={cardStyle}
             onClick={() => navigate('/admin/authors')}
             hoverable
@@ -165,22 +229,22 @@ const Dashboard = () => {
           </Card>
         </Col>
       </Row>
-      
+
       <Row gutter={16} style={{ marginTop: 32, alignContent: 'center', height: '100%' }}>
         <Col span={12}>
           <Card title="Biểu đồ doanh thu theo tháng" style={{ borderRadius: '12px' }}>
-            <div style={{ height: '500px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>  
+            <div style={{ height: '500px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Bar data={revenueData} options={{
                 plugins: {
                   tooltip: {
-                  callbacks: {
-                    label: function(context: any) {
-                      return formatprice(context.parsed.y);
+                    callbacks: {
+                      label: function (context: any) {
+                        return formatprice(context.parsed.y);
+                      }
                     }
                   }
                 }
-              }
-            }} />
+              }} />
             </div>
           </Card>
         </Col>
@@ -191,10 +255,50 @@ const Dashboard = () => {
                 plugins: {
                   tooltip: {
                     callbacks: {
-                      label: function(context: any) {
+                      label: function (context: any) {
                         const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
                         const percentage = ((context.parsed / total) * 100).toFixed(1);
                         return `${context.label}: ${context.parsed} sách (${percentage}%)`;
+                      }
+                    }
+                  }
+                }
+              }} />
+            </div>
+          </Card>
+        </Col>
+      </Row>
+      {/* Thêm 2 biểu đồ mới */}
+      <Row gutter={16} style={{ marginTop: 32, alignContent: 'center', height: '100%' }}>
+        <Col span={12}>
+          <Card title="Top 10 sách doanh thu cao nhất" style={{ borderRadius: '12px' }}>
+            <div style={{ height: '500px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <Bar data={topRevenueData} options={{
+                plugins: {
+                  tooltip: {
+                    callbacks: {
+                      label: function (context: any) {
+                        return formatprice(context.parsed.y);
+                      }
+                    }
+                  }
+                },
+                // Bar chart dọc (mặc định)
+              }} />
+            </div>
+          </Card>
+        </Col>
+        <Col span={12}>
+          <Card title="Top 10 sách bán được nhiều nhất" style={{ borderRadius: '12px' }}>
+            <div style={{ height: '500px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <Pie data={topSoldPieData} options={{
+                plugins: {
+                  tooltip: {
+                    callbacks: {
+                      label: function (context: any) {
+                        const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
+                        const percentage = ((context.parsed / total) * 100).toFixed(1);
+                        return `${context.label}: ${context.parsed} lượt bán (${percentage}%)`;
                       }
                     }
                   }
