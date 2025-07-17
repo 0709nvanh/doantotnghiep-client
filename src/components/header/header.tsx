@@ -385,7 +385,7 @@ const Header = (props: Props) => {
 							) : (
 								<div className="d-flex">
 									<Button type="primary" style={{ height: "40px" }} size="large">
-										<Link style={{ color: "white" }} to="/login">
+										<Link className="text-white" style={{ color: "white" }} to="/login">
 											Đăng nhập
 										</Link>
 									</Button>
@@ -395,7 +395,7 @@ const Header = (props: Props) => {
 										size="large"
 										style={{ height: "40px", marginLeft: "10px" }}
 									>
-										<Link style={{ color: "white" }} to="/register">
+										<Link className="text-white" style={{ color: "white" }} to="/register">
 											Đăng ký
 										</Link>
 									</Button>

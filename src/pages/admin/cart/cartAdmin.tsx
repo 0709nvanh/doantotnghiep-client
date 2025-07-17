@@ -12,51 +12,14 @@ import { getBooks, getOrders } from "@/graphql-client/query.tsx";
 
 const { Search } = Input;
 
-const columns = [
-  {
-    title: "STT",
-    dataIndex: "index",
-    render: (text: any, record: any, index: number) => index + 1,
-  },
-  {
-    title: "Tên khách hàng",
-    dataIndex: "name",
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-  },
-  {
-    title: "Address",
-    dataIndex: "address",
-  },
-  {
-    title: "Phone",
-    dataIndex: "phone",
-  },
-  {
-    title: "Số lượng",
-    dataIndex: "orderCount",
-  },
-  {
-    title: "Tổng tiền",
-    dataIndex: "total",
-  },
-  {
-    title: "Trạng thái",
-    dataIndex: "status",
-  },
-  {
-    title: "Xem chi tiết",
-    dataIndex: "cartDetail",
-  },
-];
+
 
 const CartAdmin = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<Array<string>>([]);
   const { loading, error, data } = useQuery(getOrders);
   const [add, Mutation] = useMutation<any>(updateStatusOrder);
   const [dele, Muta] = useMutation<any>(deleteStatusOrder);
+  const [page, setPage] = useState({ current: 1, pageSize: 10 });
   const [updatequan, MuQuan] = useMutation<any>(updateSingleQuantityBook);
   const [keySearch, setKeySearch] = useState<string>("");
   const inputSearchRef = React.useRef<any>("");
@@ -99,6 +62,53 @@ const CartAdmin = () => {
     //         refetchQueries: [{ query: getOrders }]
     //     })
     // }
+  };
+
+  const columns = [
+    {
+      title: "STT",
+      dataIndex: "index",
+      render: (text: any, record: any, index: number) => {
+        // Calculate index based on current page
+        return (page.current - 1) * page.pageSize + index + 1;
+      },
+    },
+    {
+      title: "Tên khách hàng",
+      dataIndex: "name",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+    },
+    {
+      title: "Address",
+      dataIndex: "address",
+    },
+    {
+      title: "Phone",
+      dataIndex: "phone",
+    },
+    {
+      title: "Số lượng",
+      dataIndex: "orderCount",
+    },
+    {
+      title: "Tổng tiền",
+      dataIndex: "total",
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+    },
+    {
+      title: "Xem chi tiết",
+      dataIndex: "cartDetail",
+    },
+  ];
+
+  const handleTableChange = (pagination: any) => {
+    setPage(pagination);
   };
   const handleUpdateOrder = (id: string, status: number) => {
     add({
@@ -208,7 +218,8 @@ const CartAdmin = () => {
         onChange={handleChageSearch}
         ref={inputSearchRef}
       />
-      <Table className="mt-4" scroll={{ x: 'max-content' }} columns={columns} dataSource={data1} />
+      <Table onChange={handleTableChange}
+        pagination={page} className="mt-4" scroll={{ x: 'max-content' }} columns={columns} dataSource={data1} />
     </div>
   );
 };

@@ -201,9 +201,6 @@ const Cart = () => {
         refetchQueries: [
           { query: getOrderByEmail, variables: { email: user?.email } },
         ],
-      }).catch((res) => {
-        const errors = res.graphQLErrors.map((error: any) => error.message);
-        toastError(`Đặt hàng thất bại số điện thoại chưa đúng! ${errors}`);
       });
       setSelectedRowKeys([]);
       setTimeout(() => {
