@@ -30,7 +30,7 @@ export default defineConfig(({ command, mode }) => {
 		},
 		build: {
 			outDir: "assets",
-			assetsDir: "static",
+			assetsDir: "",
 		},
 	};
 });
