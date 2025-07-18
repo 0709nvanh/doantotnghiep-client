@@ -9,7 +9,7 @@
 		"preview": "vite preview",
 		"lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
 		"predeploy": "npm run build",
-		"deploy": "gh-pages -d build"
+		"deploy": "gh-pages -d dist"
 	},
 	"homepage": "https://0709nvanh.github.io/doantotnghiep-client",
 	"dependencies": {
