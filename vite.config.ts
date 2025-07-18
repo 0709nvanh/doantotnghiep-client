@@ -7,7 +7,7 @@ export default defineConfig(({ command, mode }) => {
 	const isPreview = mode === "preview";
 
 	// Sử dụng base URL khác nhau cho từng môi trường
-	const base = isProduction || isPreview ? "/doantotnghiep-client/" : "/";
+	const base = isProduction || isPreview ? "/" : "/";
 
 	return {
 		base,
@@ -27,6 +27,10 @@ export default defineConfig(({ command, mode }) => {
 					replacement: path.resolve(__dirname, "src"),
 				},
 			],
+		},
+		build: {
+			outDir: "assets",
+			assetsDir: "static",
 		},
 	};
 });
