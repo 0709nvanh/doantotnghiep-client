@@ -1,6 +1,6 @@
 {
 	"name": "doantotnghiep-client",
-	"private": true,
+	"homepage": "https://0709nvanh.github.io/doantotnghiep-client/",
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
@@ -11,7 +11,6 @@
 		"predeploy": "npm run build",
 		"deploy": "gh-pages -d dist"
 	},
-	"homepage": "https://0709nvanh.github.io/doantotnghiep-client",
 	"dependencies": {
 		"@ant-design/icons": "^4.7.0",
 		"@apollo/client": "^3.4.16",
