@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 import * as path from "path";
 // https://vitejs.dev/config/
 export default defineConfig({
-	base: "/doantotnghiep-client",
+	base: "/doantotnghiep-client/",
 	plugins: [react()],
 	resolve: {
 		alias: [
