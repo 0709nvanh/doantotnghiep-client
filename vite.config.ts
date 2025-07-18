@@ -6,8 +6,8 @@ export default defineConfig(({ command, mode }) => {
 	const isProduction = command === "build";
 	const isPreview = mode === "preview";
 
-	// Sử dụng base URL khác nhau cho từng môi trường
-	const base = isProduction || isPreview ? "/" : "/";
+	// Vercel không cần base path, sử dụng "/" cho tất cả môi trường
+	const base = "/";
 
 	return {
 		base,
@@ -29,8 +29,8 @@ export default defineConfig(({ command, mode }) => {
 			],
 		},
 		build: {
-			outDir: "assets",
-			assetsDir: "",
+			outDir: "dist",
+			assetsDir: "assets",
 		},
 	};
 });
