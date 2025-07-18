@@ -6,31 +6,36 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadUserCart, clearCart, migrateState } from './features/cart/cartSlide';
 import { loadUserNotifications, clearNotifications, migrateNotificationState } from './features/notifications/notificationSlide';
 
-const App:React.FC = () => {
+const App: React.FC = () => {
   const user = useSelector((state: any) => state.auth.user)
   const dispatch = useDispatch()
-  
+
   useEffect(() => {
-    // Migrate states to ensure proper initialization
-    dispatch(migrateState());
-    dispatch(migrateNotificationState());
-    
-    if (user?.id) {
-      // Load user's cart and notifications when user is logged in
-      dispatch(loadUserCart(user.id));
-      dispatch(loadUserNotifications(user.id));
-    } else {
-      // Clear cart and notifications when user is not logged in
-      dispatch(clearCart());
-      dispatch(clearNotifications());
+    console.log('App component mounted');
+    try {
+      // Migrate states to ensure proper initialization
+      dispatch(migrateState());
+      dispatch(migrateNotificationState());
+
+      if (user?.id) {
+        // Load user's cart and notifications when user is logged in
+        dispatch(loadUserCart(user.id));
+        dispatch(loadUserNotifications(user.id));
+      } else {
+        // Clear cart and notifications when user is not logged in
+        dispatch(clearCart());
+        dispatch(clearNotifications());
+      }
+    } catch (error) {
+      console.error('Error in App useEffect:', error);
     }
   }, [user?.id, dispatch]);
 
   return (
-      <div className="App">
-        <ToastContainer autoClose={3000} />
-       <Router />
-      </div>
+    <div className="App">
+      <ToastContainer autoClose={3000} />
+      <Router />
+    </div>
   );
 }
 
