@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const PORT = 3000;
-const BASE_PATH = "/doantotnghiep-client";
+const BASE_PATH = "/";
 
 const mimeTypes = {
 	".html": "text/html",
